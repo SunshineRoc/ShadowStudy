@@ -115,7 +115,7 @@ shadow {
                         businessName = 'sample-plugin-app'
                         partKey = 'sample-plugin-app'
                         buildTask = ':sample-app:assemblePluginDebug'
-                        apkPath = 'projects/sample/source/sample-plugin/sample-app/build/outputs/apk/plugin/debug/sample-app-plugin-debug.apk'
+                        apkPath = 'plugin/sample-app/build/outputs/apk/plugin/debug/sample-app-plugin-debug.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                         dependsOn = ['sample-base']
                     }
@@ -123,7 +123,7 @@ shadow {
                         businessName = 'sample-plugin-app2'
                         partKey = 'sample-plugin-app2'
                         buildTask = ':sample-app:assemblePluginDebug'
-                        apkPath = 'projects/sample/source/sample-plugin/sample-app/build/outputs/apk/plugin/debug/sample-app-plugin-debug2.apk'
+                        apkPath = 'plugin/sample-app/build/outputs/apk/plugin/debug/sample-app-plugin-debug2.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                         dependsOn = ['sample-base']
                     }
@@ -131,7 +131,7 @@ shadow {
                         businessName = 'sample-plugin-app'
                         partKey = 'sample-base'
                         buildTask = ':sample-base:assemblePluginDebug'
-                        apkPath = 'projects/sample/source/sample-plugin/sample-base/build/outputs/apk/plugin/debug/sample-base-plugin-debug.apk'
+                        apkPath = 'plugin/sample-base/build/outputs/apk/plugin/debug/sample-base-plugin-debug.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                     }
                 }
@@ -145,7 +145,7 @@ shadow {
                         businessName = 'sample-plugin-app'
                         partKey = 'sample-plugin-app'
                         buildTask = ':sample-app:assemblePluginRelease'
-                        apkPath = 'projects/sample/source/sample-plugin/sample-app/build/outputs/apk/plugin/release/sample-app-plugin-release.apk'
+                        apkPath = 'plugin/sample-app/build/outputs/apk/plugin/release/sample-app-plugin-release.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                         dependsOn = ['sample-base']
                     }
@@ -153,7 +153,7 @@ shadow {
                         businessName = 'sample-plugin-app2'
                         partKey = 'sample-plugin-app2'
                         buildTask = ':sample-app:assemblePluginRelease'
-                        apkPath = 'projects/sample/source/sample-plugin/sample-app/build/outputs/apk/plugin/release/sample-app-plugin-release2.apk'
+                        apkPath = 'plugin/sample-app/build/outputs/apk/plugin/release/sample-app-plugin-release2.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                         dependsOn = ['sample-base']
                     }
@@ -161,15 +161,15 @@ shadow {
                         businessName = 'sample-plugin-app'
                         partKey = 'sample-base'
                         buildTask = ':sample-base:assemblePluginRelease'
-                        apkPath = 'projects/sample/source/sample-plugin/sample-base/build/outputs/apk/plugin/release/sample-base-plugin-release.apk'
+                        apkPath = 'plugin/sample-base/build/outputs/apk/plugin/release/sample-base-plugin-release.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                     }
                 }
             }
         }
 
-        loaderApkProjectPath = 'projects/sample/source/sample-plugin/sample-loader'
-        runtimeApkProjectPath = 'projects/sample/source/sample-plugin/sample-runtime'
+        loaderApkProjectPath = 'host/sample-loader'
+        runtimeApkProjectPath = 'host/sample-runtime'
 
         archiveSuffix = System.getenv("PluginSuffix") ?: ""
         archivePrefix = 'plugin'
