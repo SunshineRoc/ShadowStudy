@@ -1,68 +1,38 @@
-//pluginManagement {
-//    repositories {
-//        gradlePluginPortal()
-//        google()
-//        mavenCentral()
-//    }
-//}
-//dependencyResolutionManagement {
-//    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-//    repositories {
-//        google()
-//        mavenCentral()
-//    }
-//}
-//rootProject.name = "ShadowStudy"
-
 
 import java.nio.file.Files
 
 rootProject.name = 'ShadowStudy'
-include ':app'
 
 copyLocalPropertiesForIncludeBuilds()
 includeBuild 'sdk/coding'
 includeBuild 'sdk/core'
 includeBuild 'sdk/dynamic'
 
-//includeSample()
-//includeSampleDynamicApk()
+includeHost()
+includeManager()
+includePlugin()
 
-//def includeSample() {
-//    include 'sample-constant',
-//            'sample-host',
-//            'sample-host-lib',
-//            'sample-manager',
-//            'sample-loader',
-//            'sample-runtime',
-//            'pinnedheaderexpandablelistview',
-//            'slidingmenu',
-//            'sample-base-lib',
-//            'sample-base',
-//            'sample-app'
-//    project(':sample-constant').projectDir = file('projects/sample/source/sample-constant')
-//    project(':sample-host').projectDir = file('projects/sample/source/sample-host')
-//    project(':sample-host-lib').projectDir = file('projects/sample/source/sample-host-lib')
-//    project(':sample-manager').projectDir = file('projects/sample/source/sample-manager')
-//    project(':sample-loader').projectDir = file('projects/sample/source/sample-plugin/sample-loader')
-//    project(':sample-runtime').projectDir = file('projects/sample/source/sample-plugin/sample-runtime')
-//    project(':pinnedheaderexpandablelistview').projectDir = file('projects/sample/source/sample-plugin/third-party/pinnedheaderexpandablelistview')
-//    project(':slidingmenu').projectDir = file('projects/sample/source/sample-plugin/third-party/slidingmenu')
-//    project(':sample-base-lib').projectDir = file('projects/sample/source/sample-plugin/sample-base-lib')
-//    project(':sample-base').projectDir = file('projects/sample/source/sample-plugin/sample-base')
-//    project(':sample-app').projectDir = file('projects/sample/source/sample-plugin/sample-app')
-//}
+def includeHost() {
+    include 'sample-constant',
+            'sample-host',
+            'sample-host-lib',
+            'sample-loader',
+            'sample-runtime'
+    project(':sample-constant').projectDir = file('host/sample-constant')
+    project(':sample-host').projectDir = file('host/sample-host')
+    project(':sample-host-lib').projectDir = file('host/sample-host-lib')
+    project(':sample-loader').projectDir = file('host/sample-loader')
+    project(':sample-runtime').projectDir = file('host/sample-runtime')
+}
 
-//def includeSampleDynamicApk() {
-//    include 'sample-hello-api',
-//            'sample-hello-api-holder',
-//            'sample-hello-apk',
-//            'sample-hello-host'
-//    project(':sample-hello-api').projectDir = file('projects/sample/dynamic-apk/sample-hello-api')
-//    project(':sample-hello-api-holder').projectDir = file('projects/sample/dynamic-apk/sample-hello-api-holder')
-//    project(':sample-hello-apk').projectDir = file('projects/sample/dynamic-apk/sample-hello-apk')
-//    project(':sample-hello-host').projectDir = file('projects/sample/dynamic-apk/sample-hello-host')
-//}
+def includeManager() {
+    include 'sample-manager'
+    project(':sample-manager').projectDir = file('manager/sample-manager')
+}
+
+def includePlugin() {
+
+}
 
 /**
  * Android Studio当前不会为IncludeBuild创建包含sdk.dir的local.properties
