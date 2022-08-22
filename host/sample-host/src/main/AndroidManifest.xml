@@ -20,15 +20,9 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".plugin.PluginLoadActivity"
-            android:launchMode="standard"
-            android:screenOrientation="portrait" />
-
         <service
             android:name=".plugin.PluginProcessPPS"
             android:process=":plugin" />
-
 
         <!--dynamic activity注册
           注意configChanges需要全注册
