@@ -46,10 +46,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 安装插件
+     */
     private void installPlugin() {
-
+        PluginHelper.getInstance().init(this);
     }
 
+    /**
+     * 加载插件
+     */
     private void loadPlugin() {
         PluginHelper.getInstance().singlePool.execute(() -> {
             Intent intent = new Intent(MainActivity.this, PluginLoadActivity.class);
@@ -59,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * 卸载插件
+     */
     private void uninstallPlugin() {
 
     }

@@ -28,7 +28,6 @@ import android.os.StrictMode;
 import android.webkit.WebView;
 
 import com.shadow.study.manager.Shadow;
-import com.shadow.study.plugin.PluginHelper;
 import com.tencent.shadow.core.common.LoggerFactory;
 import com.tencent.shadow.dynamic.host.DynamicRuntime;
 import com.tencent.shadow.dynamic.host.PluginManager;
@@ -56,8 +55,6 @@ public class HostApplication extends Application {
             //因此这里恢复加载上一次的runtime
             DynamicRuntime.recoveryRuntime(this);
         }
-
-        PluginHelper.getInstance().init(this);
 
         HostUiLayerProvider.init(this);
     }

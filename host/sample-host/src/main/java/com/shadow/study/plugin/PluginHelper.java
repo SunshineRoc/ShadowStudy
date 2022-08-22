@@ -65,12 +65,7 @@ public class PluginHelper {
 
         mContext = context.getApplicationContext();
 
-        singlePool.execute(new Runnable() {
-            @Override
-            public void run() {
-                preparePlugin();
-            }
-        });
+        singlePool.execute(() -> preparePlugin());
 
     }
 
