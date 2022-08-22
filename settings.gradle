@@ -40,10 +40,8 @@ def includeManager() {
  * 集成插件
  * */
 def includePlugin() {
-    include 'sample-app',
-            'sample-base'
+    include 'sample-app'
     project(':sample-app').projectDir = file('plugin/sample-app')
-    project(':sample-base').projectDir = file('plugin/sample-base')
 }
 
 /**

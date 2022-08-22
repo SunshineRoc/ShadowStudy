@@ -116,14 +116,6 @@ shadow {
                         buildTask = ':sample-app:assemblePluginDebug'
                         apkPath = 'plugin/sample-app/build/outputs/apk/plugin/debug/sample-app-plugin-debug.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
-                        dependsOn = ['sample-base']
-                    }
-                    sampleBase {
-                        businessName = 'sample-plugin-app'
-                        partKey = 'sample-base'
-                        buildTask = ':sample-base:assemblePluginDebug'
-                        apkPath = 'plugin/sample-base/build/outputs/apk/plugin/debug/sample-base-plugin-debug.apk'
-                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                     }
                 }
             }
@@ -137,14 +129,6 @@ shadow {
                         partKey = 'sample-plugin-app'
                         buildTask = ':sample-app:assemblePluginRelease'
                         apkPath = 'plugin/sample-app/build/outputs/apk/plugin/release/sample-app-plugin-release.apk'
-                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
-                        dependsOn = ['sample-base']
-                    }
-                    sampleBase {
-                        businessName = 'sample-plugin-app'
-                        partKey = 'sample-base'
-                        buildTask = ':sample-base:assemblePluginRelease'
-                        apkPath = 'plugin/sample-base/build/outputs/apk/plugin/release/sample-base-plugin-release.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                     }
                 }

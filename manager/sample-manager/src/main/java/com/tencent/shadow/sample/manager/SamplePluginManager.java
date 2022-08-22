@@ -124,9 +124,7 @@ public class SamplePluginManager extends FastPluginManager {
 
                 InstalledPlugin installedPlugin = installPlugin(pluginZipPath, null, true);
 
-                loadPlugin(installedPlugin.UUID, PART_KEY_PLUGIN_BASE);
                 loadPlugin(installedPlugin.UUID, PART_KEY_PLUGIN_MAIN_APP);
-                callApplicationOnCreate(PART_KEY_PLUGIN_BASE);
                 callApplicationOnCreate(PART_KEY_PLUGIN_MAIN_APP);
 
                 Intent pluginIntent = new Intent();
