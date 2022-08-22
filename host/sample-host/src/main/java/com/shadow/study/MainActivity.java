@@ -1,13 +1,16 @@
 package com.shadow.study;
 
+import static com.tencent.shadow.sample.constant.Constant.PART_KEY_PLUGIN_BASE;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.tencent.shadow.dynamic.host.EnterCallback;
+import com.shadow.study.plugin.PluginHelper;
+import com.shadow.study.plugin.PluginLoadActivity;
 import com.tencent.shadow.sample.constant.Constant;
 
 public class MainActivity extends AppCompatActivity {
@@ -49,33 +52,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadPlugin() {
         PluginHelper.getInstance().singlePool.execute(() -> {
-            HostApplication.getApp().loadPluginManager(PluginHelper.getInstance().pluginManagerFile);
-
-            Bundle bundle = new Bundle();
-            // 插件 zip，这几个参数也都可以不传，直接在 PluginManager 中硬编码
-            bundle.putString(Constant.KEY_PLUGIN_ZIP_PATH, PluginHelper.getInstance().pluginZipFile.getAbsolutePath());
-            // partKey 每个插件都有自己的 partKey 用来区分多个插件
-            bundle.putString(Constant.KEY_PLUGIN_PART_KEY, getIntent().getStringExtra(Constant.KEY_PLUGIN_PART_KEY));
-            // 路径举例：com.google.samples.apps.sunflower.GardenActivity
-            bundle.putString(Constant.KEY_ACTIVITY_CLASSNAME, getIntent().getStringExtra(Constant.KEY_ACTIVITY_CLASSNAME));
-
-            HostApplication.getApp().getPluginManager()
-                    .enter(MainActivity.this, Constant.FROM_ID_START_ACTIVITY, bundle, new EnterCallback() {
-                        @Override
-                        public void onShowLoadingView(final View view) {
-                            mHandler.post(() -> mViewGroup.addView(view));
-                        }
-
-                        @Override
-                        public void onCloseLoadingView() {
-                            finish();
-                        }
-
-                        @Override
-                        public void onEnterComplete() {
-
-                        }
-                    });
+            Intent intent = new Intent(MainActivity.this, PluginLoadActivity.class);
+            intent.putExtra(Constant.KEY_PLUGIN_PART_KEY, PART_KEY_PLUGIN_BASE);
+            intent.putExtra(Constant.KEY_ACTIVITY_CLASSNAME, "com.tencent.shadow.sample.plugin.app.lib.gallery.splash.SplashActivity");
+            startActivity(intent);
         });
     }
 

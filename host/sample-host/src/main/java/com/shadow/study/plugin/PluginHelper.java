@@ -16,9 +16,11 @@
  *
  */
 
-package com.shadow.study;
+package com.shadow.study.plugin;
 
 import android.content.Context;
+
+import com.shadow.study.BuildConfig;
 
 import org.apache.commons.io.FileUtils;
 
