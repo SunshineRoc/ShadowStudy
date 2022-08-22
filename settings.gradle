@@ -12,6 +12,9 @@ includeHost()
 includeManager()
 includePlugin()
 
+/**
+ * 集成宿主
+ * */
 def includeHost() {
     include 'sample-constant',
             'sample-host',
@@ -25,13 +28,29 @@ def includeHost() {
     project(':sample-runtime').projectDir = file('host/sample-runtime')
 }
 
+/**
+ * 集成 管理模块Manager
+ * */
 def includeManager() {
     include 'sample-manager'
     project(':sample-manager').projectDir = file('manager/sample-manager')
 }
 
+/**
+ * 集成插件
+ * */
 def includePlugin() {
+    include 'sample-app',
+            'sample-base',
+            'sample-base-lib',
+            'pinnedheaderexpandablelistview',
+            'slidingmenu'
 
+    project(':sample-app').projectDir = file('plugin/sample-app')
+    project(':sample-base').projectDir = file('plugin/sample-base')
+    project(':sample-base-lib').projectDir = file('plugin/sample-base-lib')
+    project(':pinnedheaderexpandablelistview').projectDir = file('plugin/third-party/pinnedheaderexpandablelistview')
+    project(':slidingmenu').projectDir = file('plugin/third-party/slidingmenu')
 }
 
 /**
