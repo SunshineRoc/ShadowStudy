@@ -60,7 +60,8 @@ public class MainActivity extends AppCompatActivity {
         PluginHelper.getInstance().singlePool.execute(() -> {
             Intent intent = new Intent(MainActivity.this, PluginLoadActivity.class);
             intent.putExtra(Constant.KEY_PLUGIN_PART_KEY, PART_KEY_PLUGIN_BASE);
-            intent.putExtra(Constant.KEY_ACTIVITY_CLASSNAME, "com.tencent.shadow.sample.plugin.app.lib.gallery.splash.SplashActivity");
+            // 设置插件的启动页
+            intent.putExtra(Constant.KEY_ACTIVITY_CLASSNAME, "com.tencent.shadow.sample.plugin.app.lib.demo.PluginDemoActivity");
             startActivity(intent);
         });
     }

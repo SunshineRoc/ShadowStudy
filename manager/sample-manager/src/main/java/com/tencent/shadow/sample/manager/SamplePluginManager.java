@@ -35,6 +35,8 @@ import com.tencent.shadow.sample.constant.Constant;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class SamplePluginManager extends FastPluginManager {
@@ -116,34 +118,33 @@ public class SamplePluginManager extends FastPluginManager {
             callback.onShowLoadingView(view);
         }
 
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    InstalledPlugin installedPlugin = installPlugin(pluginZipPath, null, true);
+        executorService.execute(() -> {
+            try {
+                Logger.getLogger(SamplePluginManager.class.getSimpleName()).log(Level.INFO, "插件管理SamplePluginManager准备打开插件");
 
-                    loadPlugin(installedPlugin.UUID, PART_KEY_PLUGIN_BASE);
-                    loadPlugin(installedPlugin.UUID, PART_KEY_PLUGIN_MAIN_APP);
-                    callApplicationOnCreate(PART_KEY_PLUGIN_BASE);
-                    callApplicationOnCreate(PART_KEY_PLUGIN_MAIN_APP);
+                InstalledPlugin installedPlugin = installPlugin(pluginZipPath, null, true);
 
-                    Intent pluginIntent = new Intent();
-                    pluginIntent.setClassName(
-                            context.getPackageName(),
-                            className
-                    );
-                    if (extras != null) {
-                        pluginIntent.replaceExtras(extras);
-                    }
-                    Intent intent = mPluginLoader.convertActivityIntent(pluginIntent);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mPluginLoader.startActivityInPluginProcess(intent);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                loadPlugin(installedPlugin.UUID, PART_KEY_PLUGIN_BASE);
+                loadPlugin(installedPlugin.UUID, PART_KEY_PLUGIN_MAIN_APP);
+                callApplicationOnCreate(PART_KEY_PLUGIN_BASE);
+                callApplicationOnCreate(PART_KEY_PLUGIN_MAIN_APP);
+
+                Intent pluginIntent = new Intent();
+                pluginIntent.setClassName(
+                        context.getPackageName(),
+                        className
+                );
+                if (extras != null) {
+                    pluginIntent.replaceExtras(extras);
                 }
-                if (callback != null) {
-                    callback.onCloseLoadingView();
-                }
+                Intent intent = mPluginLoader.convertActivityIntent(pluginIntent);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mPluginLoader.startActivityInPluginProcess(intent); // 在插件进程中显示 intent 对应的页面
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            if (callback != null) {
+                callback.onCloseLoadingView();
             }
         });
     }

@@ -44,6 +44,8 @@ import com.tencent.shadow.sample.plugin.app.lib.gallery.cases.entity.UseCase;
 import com.tencent.shadow.sample.plugin.app.lib.gallery.cases.entity.UseCaseCategory;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MainActivity extends Activity implements
         ExpandableListView.OnChildClickListener,
@@ -63,6 +65,9 @@ public class MainActivity extends Activity implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_main);
+
+        Logger.getLogger(MainActivity.class.getSimpleName()).log(Level.INFO, "打开插件主页");
+
         expandableListView = findViewById(R.id.expandablelist);
         stickyLayout = findViewById(R.id.sticky_layout);
         slidingMenu = findViewById(R.id.slidingmenu);

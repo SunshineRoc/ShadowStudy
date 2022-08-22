@@ -26,25 +26,21 @@ import android.support.annotation.Nullable;
 import com.tencent.shadow.sample.plugin.app.lib.base.R;
 import com.tencent.shadow.sample.plugin.app.lib.gallery.MainActivity;
 
-public class SplashActivity extends Activity {
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-    private SplashAnimation mSplashAnimation;
+/**
+ * 插件的启动页，该页面运行在插件进程中
+ */
+public class SplashActivity extends Activity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_splash);
 
-        mSplashAnimation = new SplashAnimation(this);
-        mSplashAnimation.start();
+        Logger.getLogger(SplashActivity.class.getSimpleName()).log(Level.INFO, "插件调用启动页的onCreate()");
 
-        mSplashAnimation.setAnimationListener(new ISplashAnimation.AnimationListener() {
-            @Override
-            public void onAnimationEnd() {
-                finish();
-
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
-            }
-        });
+        startActivity(new Intent(SplashActivity.this, MainActivity.class));
     }
 }
