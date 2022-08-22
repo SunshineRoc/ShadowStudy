@@ -41,16 +41,9 @@ def includeManager() {
  * */
 def includePlugin() {
     include 'sample-app',
-            'sample-base',
-            'sample-base-lib',
-            'pinnedheaderexpandablelistview',
-            'slidingmenu'
-
+            'sample-base'
     project(':sample-app').projectDir = file('plugin/sample-app')
     project(':sample-base').projectDir = file('plugin/sample-base')
-    project(':sample-base-lib').projectDir = file('plugin/sample-base-lib')
-    project(':pinnedheaderexpandablelistview').projectDir = file('plugin/third-party/pinnedheaderexpandablelistview')
-    project(':slidingmenu').projectDir = file('plugin/third-party/slidingmenu')
 }
 
 /**
