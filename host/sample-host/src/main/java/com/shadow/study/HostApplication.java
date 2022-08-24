@@ -36,14 +36,15 @@ import com.tencent.shadow.sample.host.lib.HostUiLayerProvider;
 import java.io.File;
 
 public class HostApplication extends Application {
-    private static HostApplication sApp;
+
+    private static HostApplication application;
 
     private PluginManager mPluginManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        sApp = this;
+        application = this;
 
         detectNonSdkApiUsageOnAndroidP();
         setWebViewDataDirectorySuffix();
@@ -75,8 +76,8 @@ public class HostApplication extends Application {
         StrictMode.setVmPolicy(builder.build());
     }
 
-    public static HostApplication getApp() {
-        return sApp;
+    public static HostApplication getApplication() {
+        return application;
     }
 
     public void loadPluginManager(File apk) {

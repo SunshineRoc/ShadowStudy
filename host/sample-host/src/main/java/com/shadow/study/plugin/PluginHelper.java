@@ -19,12 +19,16 @@
 package com.shadow.study.plugin;
 
 import android.content.Context;
+import android.os.Environment;
+import android.text.TextUtils;
 
 import com.shadow.study.BuildConfig;
+import com.tencent.shadow.core.common.LoggerFactory;
 
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.ExecutorService;
@@ -41,6 +45,8 @@ public class PluginHelper {
      * 动态加载的插件包，里面包含以下几个部分，插件apk，插件框架apk（loader apk和runtime apk）, apk信息配置关系json文件
      */
     public final static String sPluginZip = BuildConfig.DEBUG ? "plugin-debug.zip" : "plugin-release.zip";
+
+    private String pluginSourcePath; // 插件的路径
 
     public File pluginManagerFile;
 
@@ -65,10 +71,16 @@ public class PluginHelper {
 
         mContext = context.getApplicationContext();
 
-        singlePool.execute(() -> preparePlugin());
+        singlePool.execute(() -> {
+//            preparePlugin();
 
+            copyPlugin();
+        });
     }
 
+    /**
+     * 把 assets 中的 pluginmanager.apk 和 plugin-debug.zip 复制到 sPluginManagerName 和 pluginZipFile 中
+     */
     private void preparePlugin() {
         try {
             InputStream is = mContext.getAssets().open(sPluginManagerName);
@@ -77,10 +89,56 @@ public class PluginHelper {
             InputStream zip = mContext.getAssets().open(sPluginZip);
             FileUtils.copyInputStreamToFile(zip, pluginZipFile);
 
+            LoggerFactory.getLogger(PluginHelper.class).info("preparePlugin() ==> 插件路径：" + mContext.getAssets()
+                    + "\npluginManagerFile.getAbsolutePath()=" + pluginManagerFile.getAbsolutePath()
+                    + "\npluginZipFile.getAbsolutePath()=" + pluginZipFile.getAbsolutePath());
+
         } catch (IOException e) {
             throw new RuntimeException("从assets中复制apk出错", e);
         }
     }
 
+    /**
+     * 把 SD卡中 ShadowStudy 目录中的 pluginmanager.apk 和 plugin-debug.zip 复制到 sPluginManagerName 和 pluginZipFile 中。
+     * 热更新时，可以把插件下载到SD卡中，然后从SD卡中复制到对应目录，再加载。
+     */
+    private void copyPlugin() {
+        try {
+            if (TextUtils.isEmpty(pluginSourcePath)) {
+                String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+                pluginSourcePath = sdPath + "/ShadowStudy";
+            }
+
+            // 创建路径
+            File pluginSourceFile = new File(pluginSourcePath);
+            if (!pluginSourceFile.exists()) {
+                pluginSourceFile.mkdirs();
+            }
+
+            // 复制 pluginmanager.apk
+            File pluginManagerSource = new File(pluginSourcePath, sPluginManagerName);
+            if (pluginManagerSource.exists()) {
+                InputStream pluginManagerIS = new FileInputStream(pluginManagerSource);
+                FileUtils.copyInputStreamToFile(pluginManagerIS, pluginManagerFile);
+            }
+
+            LoggerFactory.getLogger(PluginHelper.class).info("copyPlugin() ==> 插件路径：pluginManagerSource.getAbsolutePath()=" + pluginManagerSource.getAbsolutePath()
+                    + "\npluginManagerSource.exists()=" + pluginManagerSource.exists()
+                    + "\npluginManagerFile.getAbsolutePath()=" + pluginManagerFile.getAbsolutePath());
+
+            // 复制 plugin-debug.zip 或 plugin-release.zip
+            File pluginZipSource = new File(pluginSourcePath, sPluginZip);
+            if (pluginZipSource.exists()) {
+                InputStream pluginZipIS = new FileInputStream(pluginZipSource);
+                FileUtils.copyInputStreamToFile(pluginZipIS, pluginZipFile);
+            }
+
+            LoggerFactory.getLogger(PluginHelper.class).info("copyPlugin() ==> 插件路径：pluginZipSource.getAbsolutePath()=" + pluginZipSource.getAbsolutePath()
+                    + "\npluginZipSource.exists()=" + pluginZipSource.exists()
+                    + "\npluginZipFile.getAbsolutePath()=" + pluginZipFile.getAbsolutePath());
+        } catch (IOException e) {
+            throw new RuntimeException("从SD卡中复制apk出错", e);
+        }
+    }
 
 }
