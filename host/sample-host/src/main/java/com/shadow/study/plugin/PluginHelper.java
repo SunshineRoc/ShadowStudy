@@ -72,9 +72,12 @@ public class PluginHelper {
         mContext = context.getApplicationContext();
 
         singlePool.execute(() -> {
-//            preparePlugin();
 
-            copyPlugin();
+            // 从 assets 中复制插件
+            preparePlugin();
+
+            // 从SD卡中复制插件
+//            copyPlugin();
         });
     }
 
