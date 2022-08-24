@@ -74,6 +74,7 @@ def createCopyTask(projectName, buildType, name, apkName, inputFile, taskName) {
 
 def generateAssets(generateAssetsTask, buildType) {
 
+    // 把PluginManager打包为宿主 build 的 assets 目录中的pluginmanager.apk
     def moduleName = 'sample-manager'
     def pluginManagerApkFile = file(
             "${project(":sample-manager").getBuildDir()}" +
@@ -89,6 +90,7 @@ def generateAssets(generateAssetsTask, buildType) {
             "assemble${buildType.capitalize()}"
     )
 
+    // 把插件打包到宿主 build 的 assets 目录中的plugin-zip.zip文件中
     def pluginZip = file("${getRootProject().getBuildDir()}/plugin-${buildType}.zip")
     generateAssetsTask.dependsOn createCopyTask(
             ':sample-app',
