@@ -10,7 +10,8 @@ includeBuild 'sdk/dynamic'
 
 includeHost()
 includeManager()
-includePlugin()
+includePlugin1()
+includePlugin2()
 
 /**
  * 集成宿主
@@ -37,11 +38,19 @@ def includeManager() {
 }
 
 /**
- * 集成插件
+ * 集成插件1
  * */
-def includePlugin() {
+def includePlugin1() {
     include 'sample-app'
     project(':sample-app').projectDir = file('plugin/sample-app')
+}
+
+/**
+ * 集成插件2
+ * */
+def includePlugin2() {
+    include 'sample-app2'
+    project(':sample-app2').projectDir = file('plugin/sample-app2')
 }
 
 /**
