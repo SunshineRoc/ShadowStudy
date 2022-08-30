@@ -72,33 +72,6 @@ dependencies {
 preBuild.dependsOn(":sample-host-lib:jarDebugPackage")
 
 
-def createDuplicateApkTask(buildType) {
-    def apkDir = file("${getBuildDir()}/outputs/apk/plugin/$buildType")
-
-    return tasks.create("duplicatePlugin${buildType.capitalize()}ApkTask", Copy) {
-        group = 'build'
-        description = "复制一个sample-app2-plugin-${buildType}.apk用于测试目的"
-        from(apkDir) {
-            include("sample-app2-plugin-${buildType}.apk")
-            rename { "sample-app2-plugin-${buildType}2.apk" }
-        }
-        into(apkDir)
-
-    }.dependsOn(":sample-app2:assemblePlugin${buildType.capitalize()}")
-}
-
-tasks.whenTaskAdded { task ->
-    if (task.name == "assemblePluginDebug") {
-        def createTask = createDuplicateApkTask('debug')
-        task.finalizedBy(createTask)
-    }
-    if (task.name == "assemblePluginRelease") {
-        def createTask = createDuplicateApkTask('release')
-        task.finalizedBy(createTask)
-    }
-}
-
-
 shadow {
     transform {
 //        useHostContext = ['abc']
