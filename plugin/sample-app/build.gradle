@@ -110,19 +110,22 @@ shadow {
                 loaderApkConfig = new Tuple2('sample-loader-debug.apk', ':sample-loader:assembleDebug')
                 runtimeApkConfig = new Tuple2('sample-runtime-debug.apk', ':sample-runtime:assembleDebug')
                 pluginApks {
+                    // 插件 1
                     pluginApk {
                         businessName = 'sample-plugin-app'
                         partKey = 'sample-plugin-app'
                         buildTask = ':sample-app:assemblePluginDebug'
                         apkPath = 'plugin/sample-app/build/outputs/apk/plugin/debug/sample-app-plugin-debug.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
+                        dependsOn = ['sample-base'] // 插件1依赖于插件2
                     }
 
-                    pluginApk2 {
-                        businessName = 'sample-plugin-app2'
-                        partKey = 'sample-plugin-app2'
-                        buildTask = ':sample-app2:assemblePluginDebug'
-                        apkPath = 'plugin/sample-app2/build/outputs/apk/plugin/debug/sample-app2-plugin-debug.apk'
+                    // 插件2
+                    sampleBase {
+                        businessName = 'sample-plugin-app'
+                        partKey = 'sample-base'
+                        buildTask = ':sample-base:assemblePluginDebug'
+                        apkPath = 'plugin/sample-base/build/outputs/apk/plugin/debug/sample-base-plugin-debug.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                     }
                 }
@@ -138,13 +141,14 @@ shadow {
                         buildTask = ':sample-app:assemblePluginRelease'
                         apkPath = 'plugin/sample-app/build/outputs/apk/plugin/release/sample-app-plugin-release.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
+                        dependsOn = ['sample-base']
                     }
 
-                    pluginApk2 {
-                        businessName = 'sample-plugin-app2'
-                        partKey = 'sample-plugin-app2'
-                        buildTask = ':sample-app2:assemblePluginRelease'
-                        apkPath = 'plugin/sample-app2/build/outputs/apk/plugin/release/sample-app2-plugin-release.apk'
+                    sampleBase {
+                        businessName = 'sample-plugin-app'
+                        partKey = 'sample-base'
+                        buildTask = ':sample-base:assemblePluginDebug'
+                        apkPath = 'plugin/sample-base/build/outputs/apk/plugin/debug/sample-base-plugin-debug.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                     }
                 }

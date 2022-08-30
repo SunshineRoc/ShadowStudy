@@ -35,8 +35,6 @@ import com.tencent.shadow.sample.constant.Constant;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class SamplePluginManager extends FastPluginManager {
@@ -120,11 +118,14 @@ public class SamplePluginManager extends FastPluginManager {
 
         executorService.execute(() -> {
             try {
-                Logger.getLogger(SamplePluginManager.class.getSimpleName()).log(Level.INFO, "插件管理SamplePluginManager准备打开插件");
-
                 InstalledPlugin installedPlugin = installPlugin(pluginZipPath, null, true);
 
+                // 加载插件 PART_KEY_PLUGIN_BASE
+                loadPlugin(installedPlugin.UUID, PART_KEY_PLUGIN_BASE);
+                // 加载插件 PART_KEY_PLUGIN_MAIN_APP
                 loadPlugin(installedPlugin.UUID, PART_KEY_PLUGIN_MAIN_APP);
+
+                callApplicationOnCreate(PART_KEY_PLUGIN_BASE);
                 callApplicationOnCreate(PART_KEY_PLUGIN_MAIN_APP);
 
                 Intent pluginIntent = new Intent();

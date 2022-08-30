@@ -1,5 +1,6 @@
 package com.shadow.study;
 
+import static com.tencent.shadow.sample.constant.Constant.PART_KEY_PLUGIN_BASE;
 import static com.tencent.shadow.sample.constant.Constant.PART_KEY_PLUGIN_MAIN_APP;
 
 import android.Manifest;
@@ -37,9 +38,14 @@ public class MainActivity extends AppCompatActivity {
             installPlugin();
         });
 
-        findViewById(R.id.bt_load_plugin).setOnClickListener(v -> {
-            // 加载插件
-            loadPlugin();
+        findViewById(R.id.bt_load_plugin1).setOnClickListener(v -> {
+            // 加载插件1
+            loadPlugin(PART_KEY_PLUGIN_MAIN_APP, "com.tencent.shadow.sample.plugin.PluginMainActivity");
+        });
+
+        findViewById(R.id.bt_load_plugin2).setOnClickListener(v -> {
+            // 加载插件2
+            loadPlugin(PART_KEY_PLUGIN_BASE, "com.tencent.shadow.sample.base.PluginBaseMainActivity");
         });
 
         findViewById(R.id.bt_uninstall_plugin).setOnClickListener(v -> {
@@ -57,8 +63,11 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 加载插件
+     *
+     * @param partKey
+     * @param className
      */
-    private void loadPlugin() {
+    private void loadPlugin(String partKey, String className) {
         PluginHelper.getInstance().singlePool.execute(() -> {
 
             // 根据插件apk包，创建PluginManager
@@ -68,9 +77,9 @@ public class MainActivity extends AppCompatActivity {
             // 插件路径
             bundle.putString(Constant.KEY_PLUGIN_ZIP_PATH, PluginHelper.getInstance().pluginZipFile.getAbsolutePath());
             // 插件Key
-            bundle.putString(Constant.KEY_PLUGIN_PART_KEY, PART_KEY_PLUGIN_MAIN_APP);
+            bundle.putString(Constant.KEY_PLUGIN_PART_KEY, partKey);
             // 宿主加载插件时显示的启动页，该启动页显示在插件进程中
-            bundle.putString(Constant.KEY_ACTIVITY_CLASSNAME, "com.tencent.shadow.sample.plugin.PluginMainActivity");
+            bundle.putString(Constant.KEY_ACTIVITY_CLASSNAME, className);
 
             Logger.getLogger(MainActivity.class.getSimpleName()).log(Level.INFO, "准备打开插件");
 

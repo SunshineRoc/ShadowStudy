@@ -10,8 +10,9 @@ includeBuild 'sdk/dynamic'
 
 includeHost()
 includeManager()
+includePluginBase()
 includePlugin1()
-includePlugin2()
+//includePlugin2()
 
 /**
  * 集成宿主
@@ -35,6 +36,14 @@ def includeHost() {
 def includeManager() {
     include 'sample-manager'
     project(':sample-manager').projectDir = file('manager/sample-manager')
+}
+
+/**
+ * 集成 插件基础
+ * */
+def includePluginBase() {
+    include 'sample-base'
+    project(':sample-base').projectDir = file('plugin/sample-base')
 }
 
 /**
