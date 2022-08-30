@@ -102,15 +102,15 @@ def generateAssets(generateAssetsTask, buildType) {
     )
 
     // 把插件打包到宿主 build 的 assets 目录中的plugin-zip.zip文件中
-    def pluginZip2 = file("${getRootProject().getBuildDir()}/plugin-${buildType}2.zip")
-    generateAssetsTask.dependsOn createCopyTask(
-            ':sample-app2',
-            buildType,
-            'plugin-zip2',
-            "plugin2-${buildType}.zip",
-            pluginZip2,
-            "package${buildType.capitalize()}Plugin"
-    )
+//    def pluginZip2 = file("${getRootProject().getBuildDir()}/plugin-${buildType}2.zip")
+//    generateAssetsTask.dependsOn createCopyTask(
+//            ':sample-app2',
+//            buildType,
+//            'plugin-zip2',
+//            "plugin2-${buildType}.zip",
+//            pluginZip2,
+//            "package${buildType.capitalize()}Plugin"
+//    )
 
     println("generateAssets() ==》 打包：getRootProject().getBuildDir()=${getRootProject().getBuildDir()}，" +
             "buildType=$buildType，" +

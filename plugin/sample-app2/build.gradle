@@ -72,78 +72,78 @@ dependencies {
 preBuild.dependsOn(":sample-host-lib:jarDebugPackage")
 
 
-def createDuplicateApkTask(buildType) {
-    def apkDir = file("${getBuildDir()}/outputs/apk/plugin/$buildType")
-
-    return tasks.create("duplicatePlugin${buildType.capitalize()}ApkTask", Copy) {
-        group = 'build'
-        description = "复制一个sample-app2-plugin-${buildType}.apk用于测试目的"
-        from(apkDir) {
-            include("sample-app2-plugin-${buildType}.apk")
-            rename { "sample-app2-plugin-${buildType}.apk" }
-        }
-        into(apkDir)
-
-    }.dependsOn(":sample-app2:assemblePlugin${buildType.capitalize()}")
-}
-
-tasks.whenTaskAdded { task ->
-    if (task.name == "assemblePluginDebug") {
-        def createTask = createDuplicateApkTask('debug')
-        task.finalizedBy(createTask)
-    }
-    if (task.name == "assemblePluginRelease") {
-        def createTask = createDuplicateApkTask('release')
-        task.finalizedBy(createTask)
-    }
-}
-
-
-shadow {
-    transform {
-//        useHostContext = ['abc']
-    }
-
-    packagePlugin {
-        pluginTypes {
-            debug {
-                loaderApkConfig = new Tuple2('sample-loader-debug.apk', ':sample-loader:assembleDebug')
-                runtimeApkConfig = new Tuple2('sample-runtime-debug.apk', ':sample-runtime:assembleDebug')
-                pluginApks {
-                    pluginApk {
-                        businessName = 'sample-plugin-app2'
-                        partKey = 'sample-plugin-app2'
-                        buildTask = ':sample-app2:assemblePluginDebug'
-                        apkPath = 'plugin/sample-app2/build/outputs/apk/plugin/debug/sample-app2-plugin-debug.apk'
-                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
-                    }
-                }
-            }
-
-            release {
-                loaderApkConfig = new Tuple2('sample-loader-release.apk', ':sample-loader:assembleRelease')
-                runtimeApkConfig = new Tuple2('sample-runtime-release.apk', ':sample-runtime:assembleRelease')
-                pluginApks {
-                    pluginApk {
-                        businessName = 'sample-plugin-app2'
-                        partKey = 'sample-plugin-app2'
-                        buildTask = ':sample-app2:assemblePluginRelease'
-                        apkPath = 'plugin/sample-app2/build/outputs/apk/plugin/release/sample-app2-plugin-release.apk'
-                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
-                    }
-                }
-            }
-        }
-
-        loaderApkProjectPath = 'host/sample-loader'
-        runtimeApkProjectPath = 'host/sample-runtime'
-
-        archiveSuffix = System.getenv("PluginSuffix") ?: ""
-        archivePrefix = 'plugin'
-        destinationDir = "${getRootProject().getBuildDir()}"
-
-        version = 4
-        compactVersion = [1, 2, 3]
-        uuidNickName = "1.1.5"
-    }
-}
+//def createDuplicateApkTask(buildType) {
+//    def apkDir = file("${getBuildDir()}/outputs/apk/plugin/$buildType")
+//
+//    return tasks.create("duplicatePlugin${buildType.capitalize()}ApkTask", Copy) {
+//        group = 'build'
+//        description = "复制一个sample-app2-plugin-${buildType}.apk用于测试目的"
+//        from(apkDir) {
+//            include("sample-app2-plugin-${buildType}.apk")
+//            rename { "sample-app2-plugin-${buildType}.apk" }
+//        }
+//        into(apkDir)
+//
+//    }.dependsOn(":sample-app2:assemblePlugin${buildType.capitalize()}")
+//}
+//
+//tasks.whenTaskAdded { task ->
+//    if (task.name == "assemblePluginDebug") {
+//        def createTask = createDuplicateApkTask('debug')
+//        task.finalizedBy(createTask)
+//    }
+//    if (task.name == "assemblePluginRelease") {
+//        def createTask = createDuplicateApkTask('release')
+//        task.finalizedBy(createTask)
+//    }
+//}
+//
+//
+//shadow {
+//    transform {
+////        useHostContext = ['abc']
+//    }
+//
+//    packagePlugin {
+//        pluginTypes {
+//            debug {
+//                loaderApkConfig = new Tuple2('sample-loader-debug.apk', ':sample-loader:assembleDebug')
+//                runtimeApkConfig = new Tuple2('sample-runtime-debug.apk', ':sample-runtime:assembleDebug')
+//                pluginApks {
+//                    pluginApk {
+//                        businessName = 'sample-plugin-app2'
+//                        partKey = 'sample-plugin-app2'
+//                        buildTask = ':sample-app2:assemblePluginDebug'
+//                        apkPath = 'plugin/sample-app2/build/outputs/apk/plugin/debug/sample-app2-plugin-debug.apk'
+//                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
+//                    }
+//                }
+//            }
+//
+//            release {
+//                loaderApkConfig = new Tuple2('sample-loader-release.apk', ':sample-loader:assembleRelease')
+//                runtimeApkConfig = new Tuple2('sample-runtime-release.apk', ':sample-runtime:assembleRelease')
+//                pluginApks {
+//                    pluginApk {
+//                        businessName = 'sample-plugin-app2'
+//                        partKey = 'sample-plugin-app2'
+//                        buildTask = ':sample-app2:assemblePluginRelease'
+//                        apkPath = 'plugin/sample-app2/build/outputs/apk/plugin/release/sample-app2-plugin-release.apk'
+//                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
+//                    }
+//                }
+//            }
+//        }
+//
+//        loaderApkProjectPath = 'host/sample-loader'
+//        runtimeApkProjectPath = 'host/sample-runtime'
+//
+//        archiveSuffix = System.getenv("PluginSuffix") ?: ""
+//        archivePrefix = 'plugin'
+//        destinationDir = "${getRootProject().getBuildDir()}"
+//
+//        version = 4
+//        compactVersion = [1, 2, 3]
+//        uuidNickName = "1.1.5"
+//    }
+//}
