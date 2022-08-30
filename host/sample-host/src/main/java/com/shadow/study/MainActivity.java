@@ -1,6 +1,6 @@
 package com.shadow.study;
 
-import static com.tencent.shadow.sample.constant.Constant.PART_KEY_PLUGIN_BASE;
+import static com.tencent.shadow.sample.constant.Constant.PART_KEY_PLUGIN_APP_1;
 import static com.tencent.shadow.sample.constant.Constant.PART_KEY_PLUGIN_MAIN_APP;
 
 import android.Manifest;
@@ -40,12 +40,12 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.bt_load_plugin1).setOnClickListener(v -> {
             // 加载插件1
-            loadPlugin(PART_KEY_PLUGIN_MAIN_APP, "com.tencent.shadow.sample.plugin.PluginMainActivity");
+            loadPlugin(PART_KEY_PLUGIN_APP_1, "com.tencent.shadow.sample.base.PluginBaseMainActivity");
         });
 
         findViewById(R.id.bt_load_plugin2).setOnClickListener(v -> {
             // 加载插件2
-            loadPlugin(PART_KEY_PLUGIN_BASE, "com.tencent.shadow.sample.base.PluginBaseMainActivity");
+            loadPlugin(PART_KEY_PLUGIN_MAIN_APP, "com.tencent.shadow.sample.plugin.PluginMainActivity");
         });
 
         findViewById(R.id.bt_uninstall_plugin).setOnClickListener(v -> {
