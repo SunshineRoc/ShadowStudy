@@ -49,8 +49,8 @@ def includePlugin1() {
  * 集成插件2
  * */
 def includePlugin2() {
-    include 'sample-app'
-    project(':sample-app').projectDir = file('plugin/sample-app')
+    include 'sample-app2'
+    project(':sample-app2').projectDir = file('plugin/sample-app2')
 }
 
 /**

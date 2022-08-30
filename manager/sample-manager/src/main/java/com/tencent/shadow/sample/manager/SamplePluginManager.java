@@ -18,8 +18,8 @@
 
 package com.tencent.shadow.sample.manager;
 
-import static com.tencent.shadow.sample.constant.Constant.PART_KEY_PLUGIN_ANOTHER_APP;
 import static com.tencent.shadow.sample.constant.Constant.PART_KEY_PLUGIN_APP_ONE;
+import static com.tencent.shadow.sample.constant.Constant.PART_KEY_PLUGIN_APP_TWO;
 import static com.tencent.shadow.sample.constant.Constant.PART_KEY_PLUGIN_MAIN_APP;
 
 import android.content.Context;
@@ -65,7 +65,7 @@ public class SamplePluginManager extends FastPluginManager {
             return "com.shadow.study.plugin.PluginProcessPPS";
         } else if (PART_KEY_PLUGIN_APP_ONE.equals(partKey)) {
             return "com.shadow.study.plugin.PluginProcessPPS";
-        } else if (PART_KEY_PLUGIN_ANOTHER_APP.equals(partKey)) {
+        } else if (PART_KEY_PLUGIN_APP_TWO.equals(partKey)) {
             return "com.shadow.study.plugin.Plugin2ProcessPPS";//在这里支持多个插件
         } else {
             //如果有默认PPS，可用return代替throw
@@ -122,11 +122,11 @@ public class SamplePluginManager extends FastPluginManager {
 
                 // 加载插件1
                 loadPlugin(installedPlugin.UUID, PART_KEY_PLUGIN_APP_ONE);
-                // 加载插件 PART_KEY_PLUGIN_MAIN_APP
-                loadPlugin(installedPlugin.UUID, PART_KEY_PLUGIN_MAIN_APP);
+                // 加载插件2
+                loadPlugin(installedPlugin.UUID, PART_KEY_PLUGIN_APP_TWO);
 
                 callApplicationOnCreate(PART_KEY_PLUGIN_APP_ONE);
-                callApplicationOnCreate(PART_KEY_PLUGIN_MAIN_APP);
+                callApplicationOnCreate(PART_KEY_PLUGIN_APP_TWO);
 
                 Intent pluginIntent = new Intent();
                 pluginIntent.setClassName(

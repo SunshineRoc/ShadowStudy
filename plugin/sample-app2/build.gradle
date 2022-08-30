@@ -77,14 +77,14 @@ def createDuplicateApkTask(buildType) {
 
     return tasks.create("duplicatePlugin${buildType.capitalize()}ApkTask", Copy) {
         group = 'build'
-        description = "复制一个sample-app-plugin-${buildType}.apk用于测试目的"
+        description = "复制一个sample-app2-plugin-${buildType}.apk用于测试目的"
         from(apkDir) {
-            include("sample-app-plugin-${buildType}.apk")
-            rename { "sample-app-plugin-${buildType}2.apk" }
+            include("sample-app2-plugin-${buildType}.apk")
+            rename { "sample-app2-plugin-${buildType}2.apk" }
         }
         into(apkDir)
 
-    }.dependsOn(":sample-app:assemblePlugin${buildType.capitalize()}")
+    }.dependsOn(":sample-app2:assemblePlugin${buildType.capitalize()}")
 }
 
 tasks.whenTaskAdded { task ->
@@ -122,9 +122,9 @@ shadow {
                     // 插件2
                     pluginApk2 {
                         businessName = 'sample-plugin-app'
-                        partKey = 'sample-plugin-app'
-                        buildTask = ':sample-app:assemblePluginDebug'
-                        apkPath = 'plugin/sample-app/build/outputs/apk/plugin/debug/sample-app-plugin-debug.apk'
+                        partKey = 'sample-plugin-app2'
+                        buildTask = ':sample-app2:assemblePluginDebug'
+                        apkPath = 'plugin/sample-app2/build/outputs/apk/plugin/debug/sample-app2-plugin-debug.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                         dependsOn = ['sample-plugin-app1'] // 插件2依赖于插件1，所以这里的内容必须与插件1的partKey一致
                     }
@@ -147,9 +147,9 @@ shadow {
                     // 插件 2
                     pluginApk2 {
                         businessName = 'sample-plugin-app'
-                        partKey = 'sample-plugin-app'
-                        buildTask = ':sample-app:assemblePluginDebug'
-                        apkPath = 'plugin/sample-app/build/outputs/apk/plugin/debug/sample-app-plugin-release.apk'
+                        partKey = 'sample-plugin-app2'
+                        buildTask = ':sample-app2:assemblePluginDebug'
+                        apkPath = 'plugin/sample-app2/build/outputs/apk/plugin/debug/sample-app2-plugin-release.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                         dependsOn = ['sample-plugin-app1'] // 插件2依赖于插件1，所以这里的内容必须与插件1的partKey一致
                     }

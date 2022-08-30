@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 
 import com.tencent.shadow.sample.plugin.app.lib.R;
 
-public class PluginMainActivity extends Activity {
+public class PluginTwoActivity extends Activity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
