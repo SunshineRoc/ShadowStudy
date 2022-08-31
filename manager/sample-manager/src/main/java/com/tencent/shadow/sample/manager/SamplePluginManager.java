@@ -19,6 +19,7 @@
 package com.tencent.shadow.sample.manager;
 
 import static com.tencent.shadow.sample.constant.Constant.PART_KEY_PLUGIN_APP_ONE;
+import static com.tencent.shadow.sample.constant.Constant.PART_KEY_PLUGIN_APP_THREE;
 import static com.tencent.shadow.sample.constant.Constant.PART_KEY_PLUGIN_APP_TWO;
 import static com.tencent.shadow.sample.constant.Constant.PART_KEY_PLUGIN_MAIN_APP;
 
@@ -124,9 +125,12 @@ public class SamplePluginManager extends FastPluginManager {
                 loadPlugin(installedPlugin.UUID, PART_KEY_PLUGIN_APP_ONE);
                 // 加载插件2
                 loadPlugin(installedPlugin.UUID, PART_KEY_PLUGIN_APP_TWO);
+                // 加载插件3
+                loadPlugin(installedPlugin.UUID, PART_KEY_PLUGIN_APP_THREE);
 
                 callApplicationOnCreate(PART_KEY_PLUGIN_APP_ONE);
                 callApplicationOnCreate(PART_KEY_PLUGIN_APP_TWO);
+                callApplicationOnCreate(PART_KEY_PLUGIN_APP_THREE);
 
                 Intent pluginIntent = new Intent();
                 pluginIntent.setClassName(

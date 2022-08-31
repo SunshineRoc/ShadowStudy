@@ -3,12 +3,12 @@
     package="com.tencent.shadow.sample.plugin.app.lib.base.plugin">
 
     <application
-        android:name="com.tencent.shadow.sample.plugin1.PluginOneApplication"
+        android:name="com.tencent.shadow.sample.plugin3.PluginThreeApplication"
         android:icon="@android:drawable/sym_def_app_icon"
         android:theme="@android:style/Theme.NoTitleBar">
 
         <activity
-            android:name="com.tencent.shadow.sample.plugin1.PluginOneMainActivity"
+            android:name="com.tencent.shadow.sample.plugin3.PluginThreeMainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTask">
             <intent-filter>

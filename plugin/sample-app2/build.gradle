@@ -101,6 +101,15 @@ shadow {
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                         dependsOn = ['sample-plugin-app1'] // 插件2依赖于插件1，所以这里的内容必须与插件1的partKey一致
                     }
+
+                    // 插件3
+                    pluginApk3 {
+                        businessName = 'sample-plugin-app'
+                        partKey = 'sample-plugin-app3'
+                        buildTask = ':sample-app3:assemblePluginDebug'
+                        apkPath = 'plugin/sample-app3/build/outputs/apk/plugin/debug/sample-app3-plugin-debug.apk'
+                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
+                    }
                 }
             }
 
@@ -125,6 +134,15 @@ shadow {
                         apkPath = 'plugin/sample-app2/build/outputs/apk/plugin/debug/sample-app2-plugin-release.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                         dependsOn = ['sample-plugin-app1'] // 插件2依赖于插件1，所以这里的内容必须与插件1的partKey一致
+                    }
+
+                    // 插件 3
+                    pluginApk3 {
+                        businessName = 'sample-plugin-app'
+                        partKey = 'sample-plugin-app3'
+                        buildTask = ':sample-app3:assemblePluginDebug'
+                        apkPath = 'plugin/sample-app3/build/outputs/apk/plugin/debug/sample-app3-plugin-release.apk'
+                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                     }
                 }
             }

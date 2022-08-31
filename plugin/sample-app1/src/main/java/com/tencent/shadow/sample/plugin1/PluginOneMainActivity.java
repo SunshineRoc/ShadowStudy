@@ -1,4 +1,4 @@
-package com.tencent.shadow.sample.base;
+package com.tencent.shadow.sample.plugin1;
 
 import android.app.Activity;
 import android.os.Bundle;

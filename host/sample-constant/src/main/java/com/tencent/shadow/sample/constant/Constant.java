@@ -26,7 +26,8 @@ final public class Constant {
     public static final String PART_KEY_PLUGIN_MAIN_APP = "sample-plugin-app";
 
     public static final String PART_KEY_PLUGIN_APP_ONE = "sample-plugin-app1"; // 插件1的partKey，必须与build.gradle中插件1的partKey一致
-    public static final String PART_KEY_PLUGIN_APP_TWO = "sample-plugin-app2"; // 插件2的partKey，必须与build.gradle中插件1的partKey一致
+    public static final String PART_KEY_PLUGIN_APP_TWO = "sample-plugin-app2"; // 插件2的partKey，必须与build.gradle中插件2的partKey一致
+    public static final String PART_KEY_PLUGIN_APP_THREE = "sample-plugin-app3"; // 插件3的partKey，必须与build.gradle中插件3的partKey一致
 
     public static final int FROM_ID_NOOP = 1000;
     public static final int FROM_ID_START_ACTIVITY = 1002;

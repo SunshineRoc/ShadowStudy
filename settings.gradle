@@ -8,10 +8,16 @@ includeBuild 'sdk/coding'
 includeBuild 'sdk/core'
 includeBuild 'sdk/dynamic'
 
+// 集成宿主
 includeHost()
+
+// 集成插件管理
 includeManager()
+
+// 集成插件
 includePlugin1()
 includePlugin2()
+includePlugin3()
 
 /**
  * 集成宿主
@@ -51,6 +57,14 @@ def includePlugin1() {
 def includePlugin2() {
     include 'sample-app2'
     project(':sample-app2').projectDir = file('plugin/sample-app2')
+}
+
+/**
+ * 集成插件3
+ * */
+def includePlugin3() {
+    include 'sample-app3'
+    project(':sample-app3').projectDir = file('plugin/sample-app3')
 }
 
 /**

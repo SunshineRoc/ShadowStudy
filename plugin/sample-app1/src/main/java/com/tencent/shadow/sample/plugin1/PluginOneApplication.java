@@ -1,4 +1,4 @@
-package com.tencent.shadow.sample.base;/*
+package com.tencent.shadow.sample.plugin1;/*
  * Tencent is pleased to support the open source community by making Tencent Shadow available.
  * Copyright (C) 2019 THL A29 Limited, a Tencent company.  All rights reserved.
  *
