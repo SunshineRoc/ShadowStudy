@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:orientation="horizontal">
+    android:orientation="vertical"
+    android:padding="30dp">
 
     <TextView
         android:id="@+id/tv_msg"
-        android:tag="tv_msg"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_gravity="center"
+        android:gravity="center"
+        android:tag="tv_msg"
         android:text="这是插件2的首页"
         android:textColor="@android:color/black"
         android:textSize="20sp" />
-</FrameLayout>
+
+    <Button
+        android:id="@+id/btn_call_plugin1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="调用插件1" />
+</LinearLayout>
