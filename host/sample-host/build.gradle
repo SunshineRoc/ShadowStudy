@@ -101,20 +101,22 @@ def generateAssets(generateAssetsTask, buildType) {
             "package${buildType.capitalize()}Plugin"
     )
 
-    // 把插件打包到宿主 build 的 assets 目录中的plugin-zip.zip文件中
-//    def pluginZip2 = file("${getRootProject().getBuildDir()}/plugin-${buildType}2.zip")
-//    generateAssetsTask.dependsOn createCopyTask(
-//            ':sample-app2',
-//            buildType,
-//            'plugin-zip2',
-//            "plugin2-${buildType}.zip",
-//            pluginZip2,
-//            "package${buildType.capitalize()}Plugin"
-//    )
+    // 把插件1打包到宿主 build 的 assets 目录中的plugin-zip.zip文件中
+    def pluginZip1 = file("${getRootProject().getBuildDir()}/plugin1-${buildType}.zip")
+    generateAssetsTask.dependsOn createCopyTask(
+            ':sample-app1',
+            buildType,
+            'plugin-zip1',
+            "plugin1-${buildType}.zip",
+            pluginZip,
+            "package${buildType.capitalize()}Plugin"
+    )
 
-    println("generateAssets() ==》 打包：getRootProject().getBuildDir()=${getRootProject().getBuildDir()}，" +
-            "buildType=$buildType，" +
-            "buildType.capitalize()=${buildType.capitalize()}")
+    println("generateAssets() ==》 打包：getRootProject().getBuildDir()=${getRootProject().getBuildDir()}" +
+            "，buildType=$buildType" +
+            "，buildType.capitalize()=${buildType.capitalize()}" +
+            "，pluginZip1.path=" + pluginZip1.path +
+            "，pluginZip.path=" + pluginZip.path)
 }
 
 tasks.whenTaskAdded { task ->

@@ -83,15 +83,6 @@ shadow {
                 loaderApkConfig = new Tuple2('sample-loader-debug.apk', ':sample-loader:assembleDebug')
                 runtimeApkConfig = new Tuple2('sample-runtime-debug.apk', ':sample-runtime:assembleDebug')
                 pluginApks {
-                    // 插件 1
-                    pluginApk1 {
-                        businessName = 'sample-plugin-app'
-                        partKey = 'sample-plugin-app1'
-                        buildTask = ':sample-app1:assemblePluginDebug'
-                        apkPath = 'plugin/sample-app1/build/outputs/apk/plugin/debug/sample-app1-plugin-debug.apk'
-                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
-                    }
-
                     // 插件2
                     pluginApk2 {
                         businessName = 'sample-plugin-app'
@@ -117,15 +108,6 @@ shadow {
                 loaderApkConfig = new Tuple2('sample-loader-release.apk', ':sample-loader:assembleRelease')
                 runtimeApkConfig = new Tuple2('sample-runtime-release.apk', ':sample-runtime:assembleRelease')
                 pluginApks {
-                    // 插件 1
-                    pluginApk1 {
-                        businessName = 'sample-plugin-app'
-                        partKey = 'sample-plugin-app1'
-                        buildTask = ':sample-app1:assemblePluginRelease'
-                        apkPath = 'plugin/sample-app1/build/outputs/apk/plugin/release/sample-app1-plugin-release.apk'
-                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
-                    }
-
                     // 插件 2
                     pluginApk2 {
                         businessName = 'sample-plugin-app'

@@ -29,6 +29,13 @@ final public class Constant {
     public static final String PART_KEY_PLUGIN_APP_TWO = "sample-plugin-app2"; // 插件2的partKey，必须与build.gradle中插件2的partKey一致
     public static final String PART_KEY_PLUGIN_APP_THREE = "sample-plugin-app3"; // 插件3的partKey，必须与build.gradle中插件3的partKey一致
 
+    public static final String SD_DIRECTORY_NAME = "/ShadowStudy"; // 当前APP在SD卡中保存插件的目录名
+    public static final String PLUGIN_MANAGER_APK_NAME = "pluginmanager.apk"; // 动态加载的插件管理apk文件名
+
+    public static final String PLUGIN_ZIP_PREFIX = "plugin"; // 插件包的前缀
+    public static final String PLUGIN_ZIP_DEBUG_SUFFIX = "-debug.zip"; // 插件包后缀：debug模式
+    public static final String PLUGIN_ZIP_RELEASE_SUFFIX = "-release.zip"; // 插件包后缀：release模式
+
     public static final int FROM_ID_NOOP = 1000;
     public static final int FROM_ID_START_ACTIVITY = 1002;
     public static final int FROM_ID_CLOSE = 1003;

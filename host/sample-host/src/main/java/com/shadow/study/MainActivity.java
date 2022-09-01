@@ -15,11 +15,9 @@ import androidx.core.app.ActivityCompat;
 
 import com.shadow.study.plugin.PluginHelper;
 import com.shadow.study.utils.PermissionManager;
+import com.tencent.shadow.core.common.LoggerFactory;
 import com.tencent.shadow.dynamic.host.EnterCallback;
 import com.tencent.shadow.sample.constant.Constant;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -64,7 +62,9 @@ public class MainActivity extends AppCompatActivity {
      * 安装插件
      */
     private void installPlugin() {
-        PluginHelper.getInstance().init(this);
+        PluginHelper.getInstance().installPluginManager();
+        PluginHelper.getInstance().installPlugin("");
+        PluginHelper.getInstance().installPlugin("1");
     }
 
     /**
@@ -76,18 +76,18 @@ public class MainActivity extends AppCompatActivity {
     private void loadPlugin(String partKey, String className) {
         PluginHelper.getInstance().singlePool.execute(() -> {
 
+            LoggerFactory.getLogger(PluginHelper.class).info("loadPlugin() ==> 准备打开插件，插件路径：" + PluginHelper.getInstance().pluginZipDestinationFile.getAbsolutePath());
+
             // 根据插件apk包，创建PluginManager
-            HostApplication.getApplication().loadPluginManager(PluginHelper.getInstance().pluginManagerFile);
+            HostApplication.getApplication().loadPluginManager(PluginHelper.getInstance().pluginManagerDestinationFile);
 
             Bundle bundle = new Bundle();
             // 插件路径
-            bundle.putString(Constant.KEY_PLUGIN_ZIP_PATH, PluginHelper.getInstance().pluginZipFile.getAbsolutePath());
+            bundle.putString(Constant.KEY_PLUGIN_ZIP_PATH, PluginHelper.getInstance().pluginZipDestinationFile.getAbsolutePath());
             // 插件Key
             bundle.putString(Constant.KEY_PLUGIN_PART_KEY, partKey);
             // 宿主加载插件时显示的启动页，该启动页显示在插件进程中
             bundle.putString(Constant.KEY_ACTIVITY_CLASSNAME, className);
-
-            Logger.getLogger(MainActivity.class.getSimpleName()).log(Level.INFO, "准备打开插件");
 
             // 进入插件
             HostApplication.getApplication().getPluginManager()
