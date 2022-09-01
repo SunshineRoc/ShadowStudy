@@ -79,8 +79,7 @@ shadow {
                 loaderApkConfig = new Tuple2('sample-loader-debug.apk', ':sample-loader:assembleDebug')
                 runtimeApkConfig = new Tuple2('sample-runtime-debug.apk', ':sample-runtime:assembleDebug')
                 pluginApks {
-                    // 插件 1
-                    pluginApk1 {
+                    pluginApk {
                         businessName = 'sample-plugin-app'
                         partKey = 'sample-plugin-app1'
                         buildTask = ':sample-app1:assemblePluginDebug'
@@ -94,8 +93,7 @@ shadow {
                 loaderApkConfig = new Tuple2('sample-loader-release.apk', ':sample-loader:assembleRelease')
                 runtimeApkConfig = new Tuple2('sample-runtime-release.apk', ':sample-runtime:assembleRelease')
                 pluginApks {
-                    // 插件 1
-                    pluginApk1 {
+                    pluginApk {
                         businessName = 'sample-plugin-app'
                         partKey = 'sample-plugin-app1'
                         buildTask = ':sample-app1:assemblePluginRelease'

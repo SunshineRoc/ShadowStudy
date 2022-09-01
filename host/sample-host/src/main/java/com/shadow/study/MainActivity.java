@@ -63,8 +63,9 @@ public class MainActivity extends AppCompatActivity {
      */
     private void installPlugin() {
         PluginHelper.getInstance().installPluginManager();
-        PluginHelper.getInstance().installPlugin("");
         PluginHelper.getInstance().installPlugin("1");
+        PluginHelper.getInstance().installPlugin("2");
+        PluginHelper.getInstance().installPlugin("3");
     }
 
     /**

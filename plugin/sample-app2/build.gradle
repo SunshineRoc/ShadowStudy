@@ -83,23 +83,13 @@ shadow {
                 loaderApkConfig = new Tuple2('sample-loader-debug.apk', ':sample-loader:assembleDebug')
                 runtimeApkConfig = new Tuple2('sample-runtime-debug.apk', ':sample-runtime:assembleDebug')
                 pluginApks {
-                    // 插件2
-                    pluginApk2 {
+                    pluginApk {
                         businessName = 'sample-plugin-app'
                         partKey = 'sample-plugin-app2'
                         buildTask = ':sample-app2:assemblePluginDebug'
                         apkPath = 'plugin/sample-app2/build/outputs/apk/plugin/debug/sample-app2-plugin-debug.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                         dependsOn = ['sample-plugin-app1'] // 插件2依赖于插件1，所以这里的内容必须与插件1的partKey一致
-                    }
-
-                    // 插件3
-                    pluginApk3 {
-                        businessName = 'sample-plugin-app'
-                        partKey = 'sample-plugin-app3'
-                        buildTask = ':sample-app3:assemblePluginDebug'
-                        apkPath = 'plugin/sample-app3/build/outputs/apk/plugin/debug/sample-app3-plugin-debug.apk'
-                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                     }
                 }
             }
@@ -108,23 +98,13 @@ shadow {
                 loaderApkConfig = new Tuple2('sample-loader-release.apk', ':sample-loader:assembleRelease')
                 runtimeApkConfig = new Tuple2('sample-runtime-release.apk', ':sample-runtime:assembleRelease')
                 pluginApks {
-                    // 插件 2
-                    pluginApk2 {
+                    pluginApk {
                         businessName = 'sample-plugin-app'
                         partKey = 'sample-plugin-app2'
                         buildTask = ':sample-app2:assemblePluginDebug'
                         apkPath = 'plugin/sample-app2/build/outputs/apk/plugin/debug/sample-app2-plugin-release.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                         dependsOn = ['sample-plugin-app1'] // 插件2依赖于插件1，所以这里的内容必须与插件1的partKey一致
-                    }
-
-                    // 插件 3
-                    pluginApk3 {
-                        businessName = 'sample-plugin-app'
-                        partKey = 'sample-plugin-app3'
-                        buildTask = ':sample-app3:assemblePluginDebug'
-                        apkPath = 'plugin/sample-app3/build/outputs/apk/plugin/debug/sample-app3-plugin-release.apk'
-                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                     }
                 }
             }
