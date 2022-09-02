@@ -23,6 +23,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.tencent.shadow.core.common.LoggerFactory;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -68,6 +70,9 @@ public class InstalledDao {
         } finally {
             db.endTransaction();
         }
+
+        LoggerFactory.getLogger(InstalledDao.class).info("insert() ==> 安装插件："
+                + "\npluginConfig.UUID=" + pluginConfig.UUID);
     }
 
     /**

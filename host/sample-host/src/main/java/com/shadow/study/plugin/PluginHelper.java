@@ -35,6 +35,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -50,10 +52,10 @@ public class PluginHelper {
     public File pluginManagerDestinationFile;
 
     /**
-     * 动态加载的插件包名，里面包含：插件apk、插件框架apk（loader apk和runtime apk）、apk信息配置关系json文件。
-     * 完整名字示例：plugin1-debug.zip、plugin2-debug.zip
+     * 插件编号-插件名的键值对。
+     * 插件名是动态加载的插件包名，里面包含：插件apk、插件框架apk（loader apk和runtime apk）、apk信息配置关系json文件，完整名字示例：plugin1-debug.zip、plugin2-debug.zip。
      */
-    public String pluginZipName;
+    public Map<String, String> pluginZipNameMap = new HashMap<>();
 
     /**
      * SD卡中的插件的路径，只用于从SD卡中复制插件管理apk和插件zip包的情况
@@ -61,9 +63,10 @@ public class PluginHelper {
     private String pluginSDSourcePath;
 
     /**
-     * 插件包复制到APK包中之后的文件，绝对路径示例：/data/user/0/com.tencent.shadow.sample.host/files/plugin-debug.zip
+     * 插件编号-插件Zip包的键值对。
+     * 插件Zip包是复制到APK包中之后的文件，绝对路径示例：/data/user/0/com.tencent.shadow.sample.host/files/plugin-debug.zip
      */
-    public File pluginZipDestinationFile;
+    public Map<String, File> pluginZipFileMap = new HashMap<>();
 
     public static PluginHelper getInstance() {
         return sInstance;
@@ -109,10 +112,10 @@ public class PluginHelper {
             copyPluginZipPrepare(number);
 
             // 从 assets 中复制插件
-            copyPluginZipFromAssets();
+            copyPluginZipFromAssets(number);
 
             // 从SD卡中复制插件
-//            copyPluginZipFromSD();
+//            copyPluginZipFromSD(number);
         });
     }
 
@@ -127,15 +130,18 @@ public class PluginHelper {
         }
 
         // 拼接要复制的插件zip文件名，完整名字示例：plugin1-debug.zip、plugin2-debug.zip
-        pluginZipName = Constant.PLUGIN_ZIP_PREFIX + number;
+        String name = Constant.PLUGIN_ZIP_PREFIX + number;
         if (BuildConfig.DEBUG) {
-            pluginZipName += Constant.PLUGIN_ZIP_DEBUG_SUFFIX;
+            name += Constant.PLUGIN_ZIP_DEBUG_SUFFIX;
         } else {
-            pluginZipName += Constant.PLUGIN_ZIP_RELEASE_SUFFIX;
+            name += Constant.PLUGIN_ZIP_RELEASE_SUFFIX;
         }
 
+        // 保存插件的文件名
+        pluginZipNameMap.put(number, name);
+
         // 创建插件zip包被复制后的文件
-        pluginZipDestinationFile = new File(mContext.getFilesDir(), pluginZipName);
+        pluginZipFileMap.put(number, new File(mContext.getFilesDir(), name));
     }
 
     /**
@@ -188,13 +194,13 @@ public class PluginHelper {
     /**
      * 把 build的assets 中的plugin-debug.zip 复制到 /data/user/0/APP包名/files/ 目录中
      */
-    private void copyPluginZipFromAssets() {
+    private void copyPluginZipFromAssets(String number) {
         try {
             LoggerFactory.getLogger(PluginHelper.class).info("copyPluginZipFromAssets() ==> 插件路径：" + mContext.getAssets()
-                    + "\npluginZipDestinationFile.getAbsolutePath()=" + pluginZipDestinationFile.getAbsolutePath());
+                    + "\npluginZipDestinationFile.getAbsolutePath()=" + pluginZipFileMap.get(number).getAbsolutePath());
 
-            InputStream zip = mContext.getAssets().open(pluginZipName);
-            FileUtils.copyInputStreamToFile(zip, pluginZipDestinationFile);
+            InputStream zip = mContext.getAssets().open(pluginZipNameMap.get(number));
+            FileUtils.copyInputStreamToFile(zip, pluginZipFileMap.get(number));
         } catch (IOException e) {
             throw new RuntimeException("从assets中复制apk出错", e);
         }
@@ -204,7 +210,7 @@ public class PluginHelper {
      * 把 SD卡中 ShadowStudy 目录中的 plugin-debug.zip 复制到 /data/user/0/APP包名/files/ 目录中
      * 热更新时，可以把插件下载到SD卡中，然后从SD卡中复制到对应目录，再加载。
      */
-    private void copyPluginZipFromSD() {
+    private void copyPluginZipFromSD(String number) {
         try {
             if (TextUtils.isEmpty(pluginSDSourcePath)) {
                 String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -218,18 +224,26 @@ public class PluginHelper {
             }
 
             // 复制插件zip包
-            File pluginZipSource = new File(pluginSDSourcePath, pluginZipName);
+            File pluginZipSource = new File(pluginSDSourcePath, pluginZipNameMap.get(number));
             if (pluginZipSource.exists()) {
                 InputStream pluginZipIS = new FileInputStream(pluginZipSource);
-                FileUtils.copyInputStreamToFile(pluginZipIS, pluginZipDestinationFile);
+                FileUtils.copyInputStreamToFile(pluginZipIS, pluginZipFileMap.get(number));
             }
 
             LoggerFactory.getLogger(PluginHelper.class).info("copyPluginZipFromSD() ==> 插件路径：pluginZipSource.getAbsolutePath()=" + pluginZipSource.getAbsolutePath()
                     + "\npluginZipSource.exists()=" + pluginZipSource.exists()
-                    + "\npluginZipDestinationFile.getAbsolutePath()=" + pluginZipDestinationFile.getAbsolutePath());
+                    + "\npluginZipDestinationFile.getAbsolutePath()=" + pluginZipFileMap.get(number).getAbsolutePath());
         } catch (IOException e) {
             throw new RuntimeException("从SD卡中复制apk出错", e);
         }
     }
 
+    /**
+     * 获取插件Zip文件
+     *
+     * @param number 插件编号
+     */
+    public File getPluginZipFile(String number) {
+        return pluginZipFileMap.get(number);
+    }
 }

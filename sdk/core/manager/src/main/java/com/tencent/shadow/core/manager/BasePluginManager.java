@@ -136,6 +136,9 @@ public abstract class BasePluginManager {
         String oDexDir = ODexBloc.isEffective() ?
                 AppCacheFolderManager.getODexDir(root, pluginConfig.UUID).getAbsolutePath() : null;
 
+        LoggerFactory.getLogger(BasePluginManager.class).info("onInstallCompleted() ==> 插件安装完成："
+                + "\npluginConfig.UUID=" + pluginConfig.UUID);
+
         mInstalledDao.insert(pluginConfig, soDirMap, oDexDir);
     }
 

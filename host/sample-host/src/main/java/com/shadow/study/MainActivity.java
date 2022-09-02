@@ -39,17 +39,17 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.bt_load_plugin1).setOnClickListener(v -> {
             // 加载插件1
-            loadPlugin(PART_KEY_PLUGIN_APP_ONE, "com.tencent.shadow.sample.plugin1.PluginOneMainActivity");
+            loadPlugin(PART_KEY_PLUGIN_APP_ONE, "1", "com.tencent.shadow.sample.plugin1.PluginOneMainActivity");
         });
 
         findViewById(R.id.bt_load_plugin2).setOnClickListener(v -> {
             // 加载插件2
-            loadPlugin(PART_KEY_PLUGIN_APP_TWO, "com.tencent.shadow.sample.plugin2.PluginTwoMainActivity");
+            loadPlugin(PART_KEY_PLUGIN_APP_TWO, "2", "com.tencent.shadow.sample.plugin2.PluginTwoMainActivity");
         });
 
         findViewById(R.id.bt_load_plugin3).setOnClickListener(v -> {
             // 加载插件3
-            loadPlugin(PART_KEY_PLUGIN_APP_THREE, "com.tencent.shadow.sample.plugin3.PluginThreeMainActivity");
+            loadPlugin(PART_KEY_PLUGIN_APP_THREE, "3", "com.tencent.shadow.sample.plugin3.PluginThreeMainActivity");
         });
 
         findViewById(R.id.bt_uninstall_plugin).setOnClickListener(v -> {
@@ -72,19 +72,20 @@ public class MainActivity extends AppCompatActivity {
      * 加载插件
      *
      * @param partKey
+     * @param number
      * @param className
      */
-    private void loadPlugin(String partKey, String className) {
+    private void loadPlugin(String partKey, String number, String className) {
         PluginHelper.getInstance().singlePool.execute(() -> {
 
-            LoggerFactory.getLogger(PluginHelper.class).info("loadPlugin() ==> 准备打开插件，插件路径：" + PluginHelper.getInstance().pluginZipDestinationFile.getAbsolutePath());
+            LoggerFactory.getLogger(PluginHelper.class).info("loadPlugin() ==> 准备打开插件，插件路径：" + PluginHelper.getInstance().getPluginZipFile(number).getAbsolutePath());
 
             // 根据插件apk包，创建PluginManager
             HostApplication.getApplication().loadPluginManager(PluginHelper.getInstance().pluginManagerDestinationFile);
 
             Bundle bundle = new Bundle();
             // 插件路径
-            bundle.putString(Constant.KEY_PLUGIN_ZIP_PATH, PluginHelper.getInstance().pluginZipDestinationFile.getAbsolutePath());
+            bundle.putString(Constant.KEY_PLUGIN_ZIP_PATH, PluginHelper.getInstance().getPluginZipFile(number).getAbsolutePath());
             // 插件Key
             bundle.putString(Constant.KEY_PLUGIN_PART_KEY, partKey);
             // 宿主加载插件时显示的启动页，该启动页显示在插件进程中

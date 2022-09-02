@@ -30,6 +30,7 @@ import android.os.RemoteException;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.tencent.shadow.core.common.LoggerFactory;
 import com.tencent.shadow.core.manager.installplugin.InstalledPlugin;
 import com.tencent.shadow.dynamic.host.EnterCallback;
 import com.tencent.shadow.sample.constant.Constant;
@@ -67,10 +68,14 @@ public class SamplePluginManager extends FastPluginManager {
         } else if (PART_KEY_PLUGIN_APP_ONE.equals(partKey)) {
             return "com.shadow.study.plugin.PluginProcessPPS";
         } else if (PART_KEY_PLUGIN_APP_TWO.equals(partKey)) {
-            return "com.shadow.study.plugin.Plugin2ProcessPPS";//在这里支持多个插件
+            return "com.shadow.study.plugin.PluginProcessPPS";
+        } else if (PART_KEY_PLUGIN_APP_THREE.equals(partKey)) {
+            return "com.shadow.study.plugin.PluginProcessPPS";
         } else {
-            //如果有默认PPS，可用return代替throw
-            throw new IllegalArgumentException("unexpected plugin load request: " + partKey);
+//            //如果有默认PPS，可用return代替throw
+//            throw new IllegalArgumentException("unexpected plugin load request: " + partKey);
+
+            return "com.shadow.study.plugin.Plugin2ProcessPPS";//在这里支持多个插件
         }
     }
 
@@ -107,6 +112,7 @@ public class SamplePluginManager extends FastPluginManager {
         final String pluginZipPath = bundle.getString(Constant.KEY_PLUGIN_ZIP_PATH);
         final String partKey = bundle.getString(Constant.KEY_PLUGIN_PART_KEY);
         final String className = bundle.getString(Constant.KEY_ACTIVITY_CLASSNAME);
+
         if (className == null) {
             throw new NullPointerException("className == null");
         }
@@ -121,12 +127,17 @@ public class SamplePluginManager extends FastPluginManager {
             try {
                 InstalledPlugin installedPlugin = installPlugin(pluginZipPath, null, true);
 
-                // 加载插件1
-                loadPlugin(installedPlugin.UUID, PART_KEY_PLUGIN_APP_ONE);
-                // 加载插件2
-                loadPlugin(installedPlugin.UUID, PART_KEY_PLUGIN_APP_TWO);
-                // 加载插件3
-                loadPlugin(installedPlugin.UUID, PART_KEY_PLUGIN_APP_THREE);
+                LoggerFactory.getLogger(SamplePluginManager.class).info("onStartActivity() ==> 打开插件：" +
+                        "\npartKey=" + partKey
+                        + "，installedPlugin.UUID=" + installedPlugin.UUID
+                        + "，pluginZipPath=" + pluginZipPath
+                        + "\nclassName=" + className);
+
+                // 加载插件
+                loadPlugin(installedPlugin.UUID, partKey);
+
+                // 调用插件APP
+                callApplicationOnCreate(partKey);
 
                 callApplicationOnCreate(PART_KEY_PLUGIN_APP_ONE);
                 callApplicationOnCreate(PART_KEY_PLUGIN_APP_TWO);
