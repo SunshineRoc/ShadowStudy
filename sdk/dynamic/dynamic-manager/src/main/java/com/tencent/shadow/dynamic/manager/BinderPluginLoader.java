@@ -56,11 +56,13 @@ class BinderPluginLoader implements PluginLoader {
 
     @Override
     public Map getLoadedPlugin() throws RemoteException {
+
         Parcel _data = Parcel.obtain();
         Parcel _reply = Parcel.obtain();
         Map _result;
         try {
             _data.writeInterfaceToken(DESCRIPTOR);
+            // 最终调用到 BinderPluginLoader 的 getLoadedPlugin() 方法
             mRemote.transact(TRANSACTION_getLoadedPlugin, _data, _reply, 0);
             _reply.readException();
             ClassLoader cl = (ClassLoader) this.getClass().getClassLoader();

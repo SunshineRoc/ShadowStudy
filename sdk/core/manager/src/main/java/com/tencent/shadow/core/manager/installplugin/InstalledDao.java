@@ -203,6 +203,7 @@ public class InstalledDao {
         }
         cursor.close();
         List<InstalledPlugin> installedPlugins = new ArrayList<>();
+        // 根据uuid获取对应的插件信息
         for (String uuid : uuids) {
             installedPlugins.add(getInstalledPluginByUUID(uuid));
         }

@@ -32,6 +32,9 @@ public class PpsController {
         mRemote = remote;
     }
 
+    /**
+     * 跨进程（插件进程）加载runtime
+     */
     public void loadRuntime(String uuid) throws RemoteException, FailedException {
         Parcel _data = Parcel.obtain();
         Parcel _reply = Parcel.obtain();

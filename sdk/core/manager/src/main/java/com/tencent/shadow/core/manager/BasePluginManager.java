@@ -109,6 +109,7 @@ public abstract class BasePluginManager {
         if (hash != null) {
             zipHash = hash;
         } else {
+            // 获取文件的MD5
             zipHash = mUnpackManager.zipHash(zip);
         }
         File pluginUnpackDir = mUnpackManager.getPluginUnpackDir(zipHash, zip);
@@ -240,10 +241,12 @@ public abstract class BasePluginManager {
     public final Pair<String, String> extractSo(String uuid, String partKey, File apkFile) throws InstallPluginException {
         try {
             File root = mUnpackManager.getAppDir();
+            // 获取插件模块的lib目录
             File soDir = AppCacheFolderManager.getLibDir(root, uuid);
             String soDirMapKey = InstalledType.TYPE_PLUGIN + partKey;
             String soDirPath = soDir.getAbsolutePath();
 
+            // 获取当前插件希望采用的ABI
             String pluginPreferredAbi = getPluginPreferredAbi(getPluginSupportedAbis(), apkFile);
             if (pluginPreferredAbi.isEmpty()) {
                 if (mLogger.isInfoEnabled()) {
