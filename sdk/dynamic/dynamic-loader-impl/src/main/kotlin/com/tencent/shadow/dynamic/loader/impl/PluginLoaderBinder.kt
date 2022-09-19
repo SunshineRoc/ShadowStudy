@@ -20,6 +20,8 @@ package com.tencent.shadow.dynamic.loader.impl
 
 import android.content.Intent
 import android.os.IBinder
+import android.os.Process
+import com.tencent.shadow.core.common.LoggerFactory
 import com.tencent.shadow.dynamic.host.PluginLoaderImpl
 import com.tencent.shadow.dynamic.host.UuidManager
 import com.tencent.shadow.dynamic.loader.PluginLoader
@@ -37,6 +39,8 @@ internal class PluginLoaderBinder(private val mDynamicPluginLoader: DynamicPlugi
             reply: android.os.Parcel?,
             flags: Int
     ): Boolean {
+        LoggerFactory.getLogger(PluginLoaderBinder::class.java).info("onTransact() ==> code=$code，this=$this，Process.myPid()=${Process.myPid()}")
+
         if (reply == null) {
             throw NullPointerException("reply == null")
         }
@@ -46,6 +50,8 @@ internal class PluginLoaderBinder(private val mDynamicPluginLoader: DynamicPlugi
                 return true
             }
             PluginLoader.TRANSACTION_loadPlugin -> {
+                LoggerFactory.getLogger(PluginLoaderBinder::class.java).info("onTransact() ==> loadPlugin，加载Plugin，this=$this，Process.myPid()=${Process.myPid()}")
+
                 data.enforceInterface(PluginLoader.DESCRIPTOR)
                 val _arg0: String
                 _arg0 = data.readString()!!
@@ -70,6 +76,7 @@ internal class PluginLoaderBinder(private val mDynamicPluginLoader: DynamicPlugi
                 return true
             }
             PluginLoader.TRANSACTION_callApplicationOnCreate -> {
+                LoggerFactory.getLogger(PluginLoaderBinder::class.java).info("onTransact() ==> callApplicationOnCreate，调用插件，this=$this，Process.myPid()=${Process.myPid()}")
                 data.enforceInterface(PluginLoader.DESCRIPTOR)
                 val _arg0: String
                 _arg0 = data.readString()!!
@@ -187,6 +194,9 @@ internal class PluginLoaderBinder(private val mDynamicPluginLoader: DynamicPlugi
                 return true
             }
             PluginLoader.TRANSACTION_startActivityInPluginProcess -> {
+                LoggerFactory.getLogger(PluginLoaderBinder::class.java).info("onTransact() ==> startActivityInPluginProcess()，打开插件启动页，this=" + this
+                        + "，Process.myPid()=" + Process.myPid() + "，Process.class.getName()=" + Process::class.java.name)
+
                 data.enforceInterface(PluginLoader.DESCRIPTOR)
                 try {
                     mDynamicPluginLoader.startActivityInPluginProcess(

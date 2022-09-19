@@ -113,7 +113,14 @@ abstract class ShadowPluginLoader(hostAppContext: Context) : DelegateProvider, D
     }
 
     fun callApplicationOnCreate(partKey: String) {
+        LoggerFactory.getLogger(ShadowPluginLoader::class.java).info("callApplicationOnCreate() ==> 调用插件")
+
+        // 真正启动插件APP的方法
         fun realAction() {
+
+            LoggerFactory.getLogger(ShadowPluginLoader::class.java).info("callApplicationOnCreate() -> realAction() ==> 调用插件，partKey=" + partKey
+                    + "，mHostAppContext=" + mHostAppContext)
+
             val pluginParts = getPluginParts(partKey)
             pluginParts?.let {
                 val application = pluginParts.application
@@ -140,6 +147,8 @@ abstract class ShadowPluginLoader(hostAppContext: Context) : DelegateProvider, D
     open fun loadPlugin(
             installedApk: InstalledApk
     ): Future<*> {
+        LoggerFactory.getLogger(ShadowPluginLoader::class.java).info("loadPlugin() ==> 加载Plugin")
+
         val loadParameters = installedApk.getLoadParameters()
         if (mLogger.isInfoEnabled) {
             mLogger.info("start loadPlugin")
@@ -147,12 +156,14 @@ abstract class ShadowPluginLoader(hostAppContext: Context) : DelegateProvider, D
         // 在这里初始化PluginServiceManager
         mPluginServiceManagerLock.withLock {
             if (!::mPluginServiceManager.isInitialized) {
+                // PluginServiceManager是插件service管理类，负责插件框架内所有service的启动、销毁和生命周期管理。mHostAppContext是宿主的Application。
                 mPluginServiceManager = PluginServiceManager(this, mHostAppContext)
             }
 
             mComponentManager.setPluginServiceManager(mPluginServiceManager)
         }
 
+        // 利用CachedThreadPool加载插件
         return LoadPluginBloc.loadPlugin(
                 mExecutorService,
                 mComponentManager,

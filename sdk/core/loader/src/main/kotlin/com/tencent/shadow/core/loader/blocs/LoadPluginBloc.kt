@@ -20,6 +20,7 @@ package com.tencent.shadow.core.loader.blocs
 
 import android.content.Context
 import com.tencent.shadow.core.common.InstalledApk
+import com.tencent.shadow.core.common.LoggerFactory
 import com.tencent.shadow.core.load_parameters.LoadParameters
 import com.tencent.shadow.core.loader.exceptions.LoadPluginException
 import com.tencent.shadow.core.loader.infos.PluginParts
@@ -35,6 +36,11 @@ import java.util.concurrent.Future
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
+/**
+ * 先把插件加载到ClassLoader中，
+ * 然后解析插件的清单文件、Application、四大组件、resource等内容，
+ * 最后封装这些信息并返回。
+ * */
 object LoadPluginBloc {
     @Throws(LoadPluginException::class)
     fun loadPlugin(
@@ -46,17 +52,22 @@ object LoadPluginBloc {
             installedApk: InstalledApk,
             loadParameters: LoadParameters
     ): Future<*> {
+        LoggerFactory.getLogger(LoadPluginBloc::class.java).info("loadPlugin() ==> 加载Plugin")
+
         if (installedApk.apkFilePath == null) {
             throw LoadPluginException("apkFilePath==null")
         } else {
             val buildClassLoader = executorService.submit(Callable {
                 lock.withLock {
+                    // 把插件加载到ClassLoader中
                     LoadApkBloc.loadPlugin(installedApk, loadParameters, pluginPartsMap)
                 }
             })
 
+            // 解析插件的AndroidManifest.xml
             val buildPluginManifest = executorService.submit(Callable {
                 val pluginClassLoader = buildClassLoader.get()
+                // 解析插件的AndroidManifest.xml
                 val pluginManifest = pluginClassLoader.loadPluginManifest()
                 CheckPackageNameBloc.check(pluginManifest, hostAppContext)
                 pluginManifest
@@ -117,6 +128,7 @@ object LoadPluginBloc {
                 )
             })
 
+            // 封装插件的清单文件、Application、四大组件、resource等内容
             val buildRunningPlugin = executorService.submit {
                 if (File(installedApk.apkFilePath).exists().not()) {
                     throw LoadPluginException("插件文件不存在.pluginFile==" + installedApk.apkFilePath)

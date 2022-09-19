@@ -32,6 +32,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 
 import com.tencent.shadow.core.common.InstalledApk;
+import com.tencent.shadow.core.common.LoggerFactory;
 
 import java.io.File;
 
@@ -84,6 +85,7 @@ public class PluginProcessService extends BasePluginProcessService {
     }
 
     void loadRuntime(String uuid) throws FailedException {
+
         checkUuidManagerNotNull();
         setUuid(uuid);
         if (mRuntimeLoaded) {
@@ -96,6 +98,7 @@ public class PluginProcessService extends BasePluginProcessService {
             }
             InstalledApk installedApk;
             try {
+                // 获取已安装的 runtime 的apk的信息
                 installedApk = mUuidManager.getRuntime(uuid);
             } catch (RemoteException e) {
                 throw new FailedException(ERROR_CODE_UUID_MANAGER_DEAD_EXCEPTION, e.getMessage());
@@ -103,9 +106,18 @@ public class PluginProcessService extends BasePluginProcessService {
                 throw new FailedException(ERROR_CODE_FILE_NOT_FOUND_EXCEPTION, "uuid==" + uuid + "的Runtime没有找到。cause:" + e.getMessage());
             }
 
+            LoggerFactory.getLogger(PluginProcessService.class).info("loadRuntime() ==> 加载runtime，apkFilePath=" + installedApk.apkFilePath
+                    + "，oDexPath=" + installedApk.oDexPath + "，libraryPath=" + installedApk.libraryPath);
+
+            // apkFilePath=/data/user/0/com.tencent.shadow.sample.host/files/ShadowPluginManager/UnpackedPlugin/test-dynamic-manager/b8dc3a6268ed0537653504bcc71152c7/plugin1-debug.zip/sample-runtime-debug.apk，
+            // oDexPath=/data/user/0/com.tencent.shadow.sample.host/files/ShadowPluginManager/UnpackedPlugin/test-dynamic-manager/oDex/AC104F02-AF26-4530-AE52-D0D3F97DF1A8_odex，
+            // libraryPath=null
             InstalledApk installedRuntimeApk = new InstalledApk(installedApk.apkFilePath, installedApk.oDexPath, installedApk.libraryPath);
+
+            // 关键点2：根据已安装的 runtime 的apk的信息，加载runtime
             boolean loaded = DynamicRuntime.loadRuntime(installedRuntimeApk);
             if (loaded) {
+                // 关键点3：把最新加载的runtime保存到SharedPreferences中
                 DynamicRuntime.saveLastRuntimeInfo(this, installedRuntimeApk);
             }
             mRuntimeLoaded = true;
@@ -117,6 +129,11 @@ public class PluginProcessService extends BasePluginProcessService {
         }
     }
 
+    /**
+     * 加载loader，关键点：
+     * 1、根据uuid获取已安装的 loader 的apk的信息
+     * 2、根据已安装的loader的apk的信息，加载loader，最终获取PluginLoaderBinder对象。PluginLoaderBinder继承自Binder，具有跨进程通信能力。
+     */
     void loadPluginLoader(String uuid) throws FailedException {
         if (mLogger.isInfoEnabled()) {
             mLogger.info("loadPluginLoader uuid:" + uuid + " mPluginLoader:" + mPluginLoader);
@@ -130,6 +147,7 @@ public class PluginProcessService extends BasePluginProcessService {
         try {
             InstalledApk installedApk;
             try {
+                // 关键点1：获取已安装的 loader 的apk的信息
                 installedApk = mUuidManager.getPluginLoader(uuid);
                 if (mLogger.isInfoEnabled()) {
                     mLogger.info("取出uuid==" + uuid + "的Loader apk:" + installedApk.apkFilePath);
@@ -147,6 +165,9 @@ public class PluginProcessService extends BasePluginProcessService {
                 throw new FailedException(ERROR_CODE_FILE_NOT_FOUND_EXCEPTION, file.getAbsolutePath() + "文件不存在");
             }
 
+            LoggerFactory.getLogger(PluginProcessService.class).info("loadPluginLoader() ==> 调用插件，uuid=" + uuid + "，getApplicationContext()=" + getApplicationContext());
+
+            // 关键点2：根据已安装的loader的apk的信息，加载loader，最终获取PluginLoaderBinder对象
             PluginLoaderImpl pluginLoader = new LoaderImplLoader().load(installedApk, uuid, getApplicationContext());
             pluginLoader.setUuidManager(mUuidManager);
             mPluginLoader = pluginLoader;

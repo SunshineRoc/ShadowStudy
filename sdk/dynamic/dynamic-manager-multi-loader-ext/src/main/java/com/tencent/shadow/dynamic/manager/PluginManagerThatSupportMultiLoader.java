@@ -77,6 +77,8 @@ abstract public class PluginManagerThatSupportMultiLoader extends BaseDynamicPlu
     }
 
     public final void loadRunTime(String uuid) throws RemoteException, FailedException {
+        LoggerFactory.getLogger(PluginManagerThatSupportMultiLoader.class).info("loadRuntime() ==> 加载runtime");
+
         if (mLogger.isInfoEnabled()) {
             mLogger.info("loadRunTime mPpsController:" + mPpsController);
         }

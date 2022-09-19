@@ -23,19 +23,26 @@ import static com.tencent.shadow.dynamic.host.PpsBinder.TRANSACTION_CODE_NO_EXCE
 
 import android.os.IBinder;
 import android.os.Parcel;
+import android.os.Process;
 import android.os.RemoteException;
+
+import com.tencent.shadow.core.common.LoggerFactory;
 
 public class PpsController {
     final private IBinder mRemote;
 
     PpsController(IBinder remote) {
         mRemote = remote;
+
+        LoggerFactory.getLogger(PpsController.class).info("PpsController() ==> remote=" + remote.getClass().getName());
     }
 
     /**
      * 跨进程（插件进程）加载runtime
      */
     public void loadRuntime(String uuid) throws RemoteException, FailedException {
+        LoggerFactory.getLogger(PpsController.class).info("loadRuntime() ==> 加载runtime" + this + "，Process.myPid()=" + Process.myPid());
+
         Parcel _data = Parcel.obtain();
         Parcel _reply = Parcel.obtain();
         try {

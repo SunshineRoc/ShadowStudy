@@ -99,7 +99,7 @@ public abstract class FastPluginManager extends PluginManagerThatUseDynamicLoade
         }
 
         /*
-          oDex优化 插件
+          oDex优化插件
           */
         for (Map.Entry<String, PluginConfig.PluginFileInfo> plugin : pluginConfig.plugins.entrySet()) {
             final String partKey = plugin.getKey();
@@ -136,9 +136,12 @@ public abstract class FastPluginManager extends PluginManagerThatUseDynamicLoade
         return getInstalledPlugins(1).get(0);
     }
 
-
+    /**
+     * 跨进程调用远程程PluginLoaderBinder中的callApplicationOnCreate()方法，传递宿主的Application，实例化ContentProvider实例并初始化。
+     */
     protected void callApplicationOnCreate(String partKey) throws RemoteException {
-        //
+        LoggerFactory.getLogger(FastPluginManager.class).info("callApplicationOnCreate() ==> 调用插件");
+
         Map map = mPluginLoader.getLoadedPlugin();
         Boolean isCall = (Boolean) map.get(partKey);
         if (isCall == null || !isCall) {
@@ -149,20 +152,41 @@ public abstract class FastPluginManager extends PluginManagerThatUseDynamicLoade
     /**
      * 加载 loader 和 runtime
      * 1、创建并启动插件进程
-     * 2、在插件进程中加载runtime
-     * 3、在插件进程中加载loader
+     * 2、在插件进程中加载runtime，最终会把runtime挂到pathclassLoader之上，即把DynamicRuntime对应的ClassLoader的parent修改为runtime apk 对应的BaseDexClassLoader，形成如下结构的classLoader树：
+     *      ---BootClassLoader
+     *      ----RuntimeClassLoader
+     *      ------PathClassLoader
+     * 3、在插件进程中加载loader，最终获取PluginLoaderBinder对象，加载插件时会用到该对象。PluginLoaderBinder继承自Binder，具有跨进程通信能力。
      */
     private void loadPluginLoaderAndRuntime(String uuid, String partKey) throws RemoteException, TimeoutException, FailedException {
-        // 绑定插件进程
+        LoggerFactory.getLogger(FastPluginManager.class).info("loadPluginLoaderAndRuntime() ==> 加载 loader 和 runtime：" +
+                "\nuuid=" + uuid
+                + "，partKey=" + partKey);
+
+        /*
+          第一步：创建、启动并绑定插件进程。getPluginProcessServiceName()获取插件进程的service的全类名，bindPluginProcessService()启动并绑定插件service。bindPluginProcessService()在sdk/dynamic目录的dynamic-manager模块中，也就是说，启动并绑定插件进程是在dynamic-manager模块中进行的。
+        */
         if (mPpsController == null) {
             bindPluginProcessService(getPluginProcessServiceName(partKey));
             waitServiceConnected(10, TimeUnit.SECONDS);
         }
 
-        // 在插件进程中加载runtime
+        /*
+         第二步：在插件进程中跨进程加载runtime。该方法在sdk/dynamic目录的dynamic-manager模块中实现的，该方法会调用到PpsController类的loadRuntime()方法，然后跨进程在PluginProcessService类中加载runtime。PluginProcessService类中加载runtime的步骤如下：
+         1、获取已安装的 runtime 的apk的信息。
+         2、根据已安装的 runtime 的apk的信息，加载runtime，最终会把runtime挂到pathclassLoader之上，即把DynamicRuntime对应的ClassLoader的parent修改为runtime apk 对应的BaseDexClassLoader，形成如下结构的classLoader树：
+          ---BootClassLoader
+          ----RuntimeClassLoader
+          ------PathClassLoader
+         3、把最新加载的 runtime 信息保存到SharedPreferences中。
+       */
         loadRunTime(uuid);
 
-        // 在插件进程中加载loader
+       /*
+        第三步：在插件进程中加载loader。该方法在sdk/dynamic的dynamic-manager模块中实现。该方法会调用到PpsController类的loadPluginLoader()方法，然后跨进程在PluginProcessService类中加载loader。PluginProcessService类中加载loader的步骤如下：
+        1、根据uuid获取已安装的 loader 的apk的信息。
+        2、根据已安装的loader的apk的信息，加载loader，最终获取PluginLoaderBinder对象（加载插件时就会用到该对象），并传入宿主的Application，供加载启动插件时使用。PluginLoaderBinder继承自Binder，具有跨进程通信能力。
+        */
         loadPluginLoader(uuid);
     }
 
@@ -173,6 +197,8 @@ public abstract class FastPluginManager extends PluginManagerThatUseDynamicLoade
      * @param partKey 插件的partKey
      */
     protected void loadPlugin(String uuid, String partKey) throws RemoteException, TimeoutException, FailedException {
+        LoggerFactory.getLogger(FastPluginManager.class).info("loadPlugin() ==> 加载Plugin");
+
         // 加载 loader 和 runtime
         loadPluginLoaderAndRuntime(uuid, partKey);
         Map map = mPluginLoader.getLoadedPlugin();

@@ -78,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
     private void loadPlugin(String partKey, String number, String className) {
         PluginHelper.getInstance().singlePool.execute(() -> {
 
-            LoggerFactory.getLogger(PluginHelper.class).info("loadPlugin() ==> 准备打开插件，插件路径：" + PluginHelper.getInstance().getPluginZipFile(number).getAbsolutePath());
+            LoggerFactory.getLogger(PluginHelper.class).info("loadPlugin() ==> 准备打开插件，插件路径：" + PluginHelper.getInstance().getPluginZipFile(number).getAbsolutePath()
+                    + "，context=" + MainActivity.this + "，getApplicationContext()=" + MainActivity.this.getApplicationContext());
 
             // 根据插件apk包，创建PluginManager
             HostApplication.getApplication().loadPluginManager(PluginHelper.getInstance().pluginManagerDestinationFile);

@@ -17,6 +17,7 @@ package com.tencent.shadow.sample.plugin1;/*
  */
 
 import android.app.Application;
+import android.util.Log;
 
 public class PluginOneApplication extends Application {
 
@@ -29,6 +30,8 @@ public class PluginOneApplication extends Application {
         instance = this;
         isOnCreate = true;
         super.onCreate();
+
+        Log.v("PluginOneApplication", "onCreate()，启动插件Application，this=" + this);
     }
 
     public static PluginOneApplication getInstance() {

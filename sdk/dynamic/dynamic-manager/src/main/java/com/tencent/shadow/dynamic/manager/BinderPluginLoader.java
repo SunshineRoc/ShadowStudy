@@ -22,8 +22,10 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.Parcel;
+import android.os.Process;
 import android.os.RemoteException;
 
+import com.tencent.shadow.core.common.LoggerFactory;
 import com.tencent.shadow.dynamic.loader.PluginLoader;
 import com.tencent.shadow.dynamic.loader.PluginServiceConnection;
 
@@ -39,8 +41,22 @@ class BinderPluginLoader implements PluginLoader {
         mRemote = remote;
     }
 
+    /**
+     * 跨进程调用PluginLoaderBinder的onTransact()方法，然后通过DynamicPluginLoader的loadPlugin()方法经过层层调用，最终实现加载插件的功能。
+     * 插件加载的步骤主要包括：
+     * 第一步：把插件加载到ClassLoader中。
+     * 第二步：解析并初始化插件中的清单文件、Application、四大组件、resource等内容。
+     * 第三步：封装上述信息并返回。
+     * <p>
+     * 注意：
+     * 1、加载插件时，需要用到加载loader后生成的PluginLoaderBinder对象；
+     * 2、加载插件时，需要先把插件加载到加载runtime时生成的ClassLoader中。
+     */
     @Override
     public void loadPlugin(String partKey) throws RemoteException {
+        LoggerFactory.getLogger(BinderPluginLoader.class).info("loadPlugin() ==> 加载Plugin，mRemote=" + mRemote
+                + "，Process.myPid()=" + Process.myPid() + "，Process.class.getName()=" + Process.class.getName());
+
         Parcel _data = Parcel.obtain();
         Parcel _reply = Parcel.obtain();
         try {
@@ -76,6 +92,8 @@ class BinderPluginLoader implements PluginLoader {
 
     @Override
     public void callApplicationOnCreate(String partKey) throws RemoteException {
+        LoggerFactory.getLogger(BinderPluginLoader.class).info("callApplicationOnCreate() ==> 调用插件");
+
         Parcel _data = Parcel.obtain();
         Parcel _reply = Parcel.obtain();
         try {
@@ -218,6 +236,9 @@ class BinderPluginLoader implements PluginLoader {
 
     @Override
     public void startActivityInPluginProcess(Intent intent) throws RemoteException {
+        LoggerFactory.getLogger(BinderPluginLoader.class).info("startActivityInPluginProcess() ==> 打开插件启动页，mRemote=" + mRemote
+                + "，Process.myPid()=" + Process.myPid() + "，Process.class.getName()=" + Process.class.getName());
+
         Parcel _data = Parcel.obtain();
         Parcel _reply = Parcel.obtain();
         try {

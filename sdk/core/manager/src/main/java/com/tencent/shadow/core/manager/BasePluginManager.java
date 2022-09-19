@@ -98,7 +98,7 @@ public abstract class BasePluginManager {
     }
 
     /**
-     * 从压缩包中解压插件
+     * 从压缩包中解压插件，并复制到指定位置
      *
      * @param zip  压缩包路径
      * @param hash 压缩包hash

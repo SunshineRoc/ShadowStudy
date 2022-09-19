@@ -24,6 +24,7 @@ import android.content.ServiceConnection
 import android.os.Bundle
 import android.util.Pair
 import com.tencent.shadow.coding.java_build_config.BuildConfig
+import com.tencent.shadow.core.common.LoggerFactory
 import com.tencent.shadow.core.load_parameters.LoadParameters
 import com.tencent.shadow.core.loader.infos.ContainerProviderInfo
 import com.tencent.shadow.core.runtime.PluginManifest
@@ -297,6 +298,9 @@ abstract class ComponentManager : PluginComponentLauncher {
         containerIntent.putExtra(CM_LOADER_BUNDLE_KEY, bundleForPluginLoader)
         containerIntent.putExtra(LOADER_VERSION_KEY, BuildConfig.VERSION_NAME)
         containerIntent.putExtra(PROCESS_ID_KEY, DelegateProviderHolder.sCustomPid)
+
+        LoggerFactory.getLogger(ComponentManager::class.java).info("toContainerIntent() ==> 打开插件页：containerIntent=$containerIntent")
+
         return containerIntent
     }
 

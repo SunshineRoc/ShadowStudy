@@ -125,9 +125,10 @@ public class SamplePluginManager extends FastPluginManager {
 
         executorService.execute(() -> {
             try {
+                // 安装插件
                 InstalledPlugin installedPlugin = installPlugin(pluginZipPath, null, true);
 
-                LoggerFactory.getLogger(SamplePluginManager.class).info("onStartActivity() ==> 打开插件：" +
+                LoggerFactory.getLogger(SamplePluginManager.class).info("onStartActivity() ==> 打开插件启动页：" +
                         "\npartKey=" + partKey
                         + "，installedPlugin.UUID=" + installedPlugin.UUID
                         + "，pluginZipPath=" + pluginZipPath
@@ -139,9 +140,9 @@ public class SamplePluginManager extends FastPluginManager {
                 // 调用插件APP
                 callApplicationOnCreate(partKey);
 
-                callApplicationOnCreate(PART_KEY_PLUGIN_APP_ONE);
-                callApplicationOnCreate(PART_KEY_PLUGIN_APP_TWO);
-                callApplicationOnCreate(PART_KEY_PLUGIN_APP_THREE);
+//                callApplicationOnCreate(PART_KEY_PLUGIN_APP_ONE);
+//                callApplicationOnCreate(PART_KEY_PLUGIN_APP_TWO);
+//                callApplicationOnCreate(PART_KEY_PLUGIN_APP_THREE);
 
                 Intent pluginIntent = new Intent();
                 pluginIntent.setClassName(
@@ -151,9 +152,15 @@ public class SamplePluginManager extends FastPluginManager {
                 if (extras != null) {
                     pluginIntent.replaceExtras(extras);
                 }
+                // 把插件pluginIntent转换为代理intent。pluginIntent=Intent { cmp=com.tencent.shadow.sample.host/com.tencent.shadow.sample.plugin1.PluginOneMainActivity }，intent=Intent { flg=0x10000000 cmp=com.tencent.shadow.sample.host/com.tencent.shadow.sample.plugin.runtime.PluginDefaultProxyActivity (has extras) }
                 Intent intent = mPluginLoader.convertActivityIntent(pluginIntent);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mPluginLoader.startActivityInPluginProcess(intent); // 在插件进程中显示 intent 对应的页面
+
+                LoggerFactory.getLogger(SamplePluginManager.class).info("onStartActivity() ==> 打开插件启动页：context=" + context + "，getApplicationContext()=" + context.getApplicationContext()
+                        + "，pluginIntent=" + pluginIntent + "，intent=" + intent);
+
+                // 在插件进程中打开插件启动页
+                mPluginLoader.startActivityInPluginProcess(intent);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

@@ -61,6 +61,8 @@ public class HostApplication extends Application {
         PluginHelper.getInstance().init(this);
 
         HostUiLayerProvider.init(this);
+
+        LoggerFactory.getLogger(HostApplication.class).info("onCreate() ==> 插件的宿主初始化，this=" + this);
     }
 
     private static void setWebViewDataDirectorySuffix() {

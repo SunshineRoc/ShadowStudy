@@ -25,6 +25,7 @@ import android.content.ServiceConnection
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import com.tencent.shadow.core.common.LoggerFactory
 import com.tencent.shadow.core.loader.ShadowPluginLoader
 import com.tencent.shadow.core.runtime.container.ContentProviderDelegateProviderHolder
 import com.tencent.shadow.core.runtime.container.DelegateProviderHolder
@@ -82,7 +83,11 @@ internal class DynamicPluginLoader(hostContext: Context, uuid: String) {
     }
 
     fun loadPlugin(partKey: String) {
+        LoggerFactory.getLogger(DynamicPluginLoader::class.java).info("loadPlugin() ==> 加载Plugin")
+
+        // 根据uuid和partKey获取插件信息
         val installedApk = mUuidManager.getPlugin(mUuid, partKey)
+        // 加载插件
         val future = mPluginLoader.loadPlugin(installedApk)
         future.get()
     }
@@ -98,6 +103,7 @@ internal class DynamicPluginLoader(hostContext: Context, uuid: String) {
 
     @Synchronized
     fun callApplicationOnCreate(partKey: String) {
+        LoggerFactory.getLogger(DynamicPluginLoader::class.java).info("callApplicationOnCreate() ==> 调用插件")
         mPluginLoader.callApplicationOnCreate(partKey)
     }
 
@@ -197,6 +203,8 @@ internal class DynamicPluginLoader(hostContext: Context, uuid: String) {
     @Synchronized
     fun startActivityInPluginProcess(intent: Intent) {
         mUiHandler.post {
+            LoggerFactory.getLogger(DynamicPluginLoader::class.java).info("startActivityInPluginProcess() ==> 打开插件，mContext=" + mContext
+                    + "，intent=" + intent)
             mContext.startActivity(intent)
         }
     }

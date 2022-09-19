@@ -20,6 +20,7 @@ package com.tencent.shadow.core.loader.blocs
 
 import com.tencent.shadow.core.common.InstalledApk
 import com.tencent.shadow.core.common.Logger
+import com.tencent.shadow.core.common.LoggerFactory
 import com.tencent.shadow.core.load_parameters.LoadParameters
 import com.tencent.shadow.core.loader.classloaders.CombineClassLoader
 import com.tencent.shadow.core.loader.classloaders.PluginClassLoader
@@ -35,7 +36,7 @@ import java.io.File
 object LoadApkBloc {
 
     /**
-     * 加载插件到ClassLoader中.
+     * 加载插件到ClassLoader中
      *
      * @param installedPlugin    已安装（PluginManager已经下载解包）的插件
      * @return 加载了插件的ClassLoader
@@ -46,6 +47,8 @@ object LoadApkBloc {
             loadParameters: LoadParameters,
             pluginPartsMap: MutableMap<String, PluginParts>
     ): PluginClassLoader {
+        LoggerFactory.getLogger(LoadApkBloc::class.java).info("loadPlugin() ==> 加载Plugin")
+
         val apk = File(installedApk.apkFilePath)
         val odexDir = if (installedApk.oDexPath == null) null else File(installedApk.oDexPath)
         val dependsOn = loadParameters.dependsOn

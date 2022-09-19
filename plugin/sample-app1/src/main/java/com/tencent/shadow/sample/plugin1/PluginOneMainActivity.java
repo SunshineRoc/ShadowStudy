@@ -2,6 +2,7 @@ package com.tencent.shadow.sample.plugin1;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -19,6 +20,8 @@ public class PluginOneMainActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_activity_main);
+
+        Log.v("PluginOneMainActivity", "onCreate()，打开插件首页，context=" + this);
 
         initView();
     }

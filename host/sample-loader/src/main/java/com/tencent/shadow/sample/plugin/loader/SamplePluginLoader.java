@@ -25,6 +25,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
 
 import com.tencent.shadow.core.common.InstalledApk;
+import com.tencent.shadow.core.common.LoggerFactory;
 import com.tencent.shadow.core.load_parameters.LoadParameters;
 import com.tencent.shadow.core.loader.ShadowPluginLoader;
 import com.tencent.shadow.core.loader.classloaders.PluginClassLoader;
@@ -53,6 +54,8 @@ public class SamplePluginLoader extends ShadowPluginLoader {
 
     @Override
     public Future<?> loadPlugin(final InstalledApk installedApk) throws LoadPluginException {
+        LoggerFactory.getLogger(SamplePluginLoader.class).info("loadPlugin() ==> 加载Plugin");
+
         LoadParameters loadParameters = getLoadParameters(installedApk);
         final String partKey = loadParameters.partKey;
 
