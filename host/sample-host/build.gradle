@@ -1,9 +1,10 @@
-apply plugin: 'com.android.application'
+//apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion project.COMPILE_SDK_VERSION
     defaultConfig {
-        applicationId project.SAMPLE_HOST_APP_APPLICATION_ID
+//        applicationId project.SAMPLE_HOST_APP_APPLICATION_ID
         minSdkVersion project.MIN_SDK_VERSION
         targetSdkVersion project.TARGET_SDK_VERSION
         versionCode project.VERSION_CODE
@@ -115,24 +116,24 @@ def generateAssets(generateAssetsTask, buildType) {
     )
 
     // 把插件2打包到宿主 build 的 assets 目录中的plugin2-debug/release.zip文件中
-    generateAssetsTask.dependsOn createCopyTask(
-            ':sample-app2',
-            buildType,
-            'plugin-zip',
-            "plugin2-${buildType}.zip",
-            pluginZip,
-            "package${buildType.capitalize()}Plugin"
-    )
+//    generateAssetsTask.dependsOn createCopyTask(
+//            ':sample-app2',
+//            buildType,
+//            'plugin-zip',
+//            "plugin2-${buildType}.zip",
+//            pluginZip,
+//            "package${buildType.capitalize()}Plugin"
+//    )
 
     // 把插件3打包到宿主 build 的 assets 目录中的plugin3-debug/release.zip文件中
-    generateAssetsTask.dependsOn createCopyTask(
-            ':sample-app3',
-            buildType,
-            'plugin-zip',
-            "plugin3-${buildType}.zip",
-            pluginZip,
-            "package${buildType.capitalize()}Plugin"
-    )
+//    generateAssetsTask.dependsOn createCopyTask(
+//            ':sample-app3',
+//            buildType,
+//            'plugin-zip',
+//            "plugin3-${buildType}.zip",
+//            pluginZip,
+//            "package${buildType.capitalize()}Plugin"
+//    )
 
     println("generateAssets() ==》 打包：getRootProject().getBuildDir()=${getRootProject().getBuildDir()}" +
             "，buildType=$buildType" +

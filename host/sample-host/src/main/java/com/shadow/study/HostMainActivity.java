@@ -15,16 +15,17 @@ import androidx.core.app.ActivityCompat;
 
 import com.shadow.study.plugin.PluginHelper;
 import com.shadow.study.utils.PermissionManager;
+import com.shadow.study.utils.ResourceUtils;
 import com.tencent.shadow.core.common.LoggerFactory;
 import com.tencent.shadow.dynamic.host.EnterCallback;
 import com.tencent.shadow.sample.constant.Constant;
 
-public class MainActivity extends AppCompatActivity {
+public class HostMainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(ResourceUtils.getLayoutId(HostMainActivity.this, "activity_host_main"));
 
         initPermission();
         initView();
@@ -32,27 +33,27 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
 
-        findViewById(R.id.bt_install_plugin).setOnClickListener(v -> {
+        findViewById(ResourceUtils.getResourceId(HostMainActivity.this, "bt_install_plugin")).setOnClickListener(v -> {
             // 安装插件
             installPlugin();
         });
 
-        findViewById(R.id.bt_load_plugin1).setOnClickListener(v -> {
+        findViewById(ResourceUtils.getResourceId(HostMainActivity.this, "bt_load_plugin1")).setOnClickListener(v -> {
             // 加载插件1
             loadPlugin(PART_KEY_PLUGIN_APP_ONE, "1", "com.tencent.shadow.sample.plugin1.PluginOneMainActivity");
         });
 
-        findViewById(R.id.bt_load_plugin2).setOnClickListener(v -> {
+        findViewById(ResourceUtils.getResourceId(HostMainActivity.this, "bt_load_plugin2")).setOnClickListener(v -> {
             // 加载插件2
             loadPlugin(PART_KEY_PLUGIN_APP_TWO, "2", "com.tencent.shadow.sample.plugin2.PluginTwoMainActivity");
         });
 
-        findViewById(R.id.bt_load_plugin3).setOnClickListener(v -> {
+        findViewById(ResourceUtils.getResourceId(HostMainActivity.this, "bt_load_plugin3")).setOnClickListener(v -> {
             // 加载插件3
             loadPlugin(PART_KEY_PLUGIN_APP_THREE, "3", "com.tencent.shadow.sample.plugin3.PluginThreeMainActivity");
         });
 
-        findViewById(R.id.bt_uninstall_plugin).setOnClickListener(v -> {
+        findViewById(ResourceUtils.getResourceId(HostMainActivity.this, "bt_uninstall_plugin")).setOnClickListener(v -> {
             // 卸载插件
             uninstallPlugin();
         });
@@ -64,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
     private void installPlugin() {
         PluginHelper.getInstance().installPluginManager();
         PluginHelper.getInstance().installPlugin("1");
-        PluginHelper.getInstance().installPlugin("2");
-        PluginHelper.getInstance().installPlugin("3");
+//        PluginHelper.getInstance().installPlugin("2");
+//        PluginHelper.getInstance().installPlugin("3");
     }
 
     /**
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         PluginHelper.getInstance().singlePool.execute(() -> {
 
             LoggerFactory.getLogger(PluginHelper.class).info("loadPlugin() ==> 准备打开插件，插件路径：" + PluginHelper.getInstance().getPluginZipFile(number).getAbsolutePath()
-                    + "，context=" + MainActivity.this + "，getApplicationContext()=" + MainActivity.this.getApplicationContext());
+                    + "，context=" + HostMainActivity.this + "，getApplicationContext()=" + HostMainActivity.this.getApplicationContext());
 
             // 根据插件apk包，创建PluginManager
             HostApplication.getApplication().loadPluginManager(PluginHelper.getInstance().pluginManagerDestinationFile);
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
             // 进入插件
             HostApplication.getApplication().getPluginManager()
-                    .enter(MainActivity.this, Constant.FROM_ID_START_ACTIVITY, bundle, new EnterCallback() {
+                    .enter(HostMainActivity.this, Constant.FROM_ID_START_ACTIVITY, bundle, new EnterCallback() {
                         @Override
                         public void onShowLoadingView(final View view) {
                             // 宿主加载插件过程中的过渡UI

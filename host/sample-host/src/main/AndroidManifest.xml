@@ -14,13 +14,14 @@
         android:name=".HostApplication"
         android:theme="@style/Theme.ShadowStudy">
         <activity
-            android:name=".MainActivity"
+            android:name=".HostMainActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!-- SDK中不要有以下配置，否则桌面会有两个图标 -->
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
         </activity>
 
         <service
