@@ -70,7 +70,7 @@ dependencies {
  *
  * */
 def createCopyTask(projectName, buildType, name, apkName, inputFile, taskName) {
-    def outputFile = file("${getBuildDir()}/generated/assets/${name}/${buildType}/${apkName}")
+    def outputFile = file("${getBuildDir()}/generated/assets/${name}/${apkName}")
     outputFile.getParentFile().mkdirs()
     return tasks.create("copy${buildType.capitalize()}${name.capitalize()}${apkName.capitalize()}Task", Copy) {
         group = 'build'
@@ -86,6 +86,9 @@ def createCopyTask(projectName, buildType, name, apkName, inputFile, taskName) {
 
 def generateAssets(generateAssetsTask, buildType) {
 
+    // plugin-manager、runtime、loader和插件存放在assets中的文件夹的名字
+    def directoryName = "plugin-directory"
+
     /*
       第一步：把PluginManager复制到宿主 build 的 assets 目录中
       */
@@ -98,7 +101,7 @@ def generateAssets(generateAssetsTask, buildType) {
     generateAssetsTask.dependsOn createCopyTask(
             ":$moduleName",
             buildType,
-            moduleName,
+            directoryName,
             'plugin-manager.apk',
             pluginManagerApkFile,
             "assemble${buildType.capitalize()}"
@@ -116,7 +119,7 @@ def generateAssets(generateAssetsTask, buildType) {
     generateAssetsTask.dependsOn createCopyTask(
             ":$runtimeModule",
             buildType,
-            runtimeModule,
+            directoryName,
             "$runtimeModule-${buildType}.apk",
             runtimeApkFile,
             "assemble${buildType.capitalize()}"
@@ -134,7 +137,7 @@ def generateAssets(generateAssetsTask, buildType) {
     generateAssetsTask.dependsOn createCopyTask(
             ":$loaderModule",
             buildType,
-            loaderModule,
+            directoryName,
             "$loaderModule-${buildType}.apk",
             loaderApkFile,
             "assemble${buildType.capitalize()}"
@@ -152,7 +155,7 @@ def generateAssets(generateAssetsTask, buildType) {
     generateAssetsTask.dependsOn createCopyTask(
             ":$pluginOneModule",
             buildType,
-            pluginOneModule,
+            directoryName,
             "$pluginOneModule-plugin-${buildType}.apk",
             pluginOneApkFile,
             "assemble${buildType.capitalize()}"
@@ -164,7 +167,7 @@ def generateAssets(generateAssetsTask, buildType) {
     generateAssetsTask.dependsOn createCopyTask(
             ":$pluginOneModule",
             buildType,
-            pluginOneModule,
+            directoryName,
             "$pluginOneModule-${buildType}-config.json",
             pluginOneConfigFile,
             "assemble${buildType.capitalize()}"
