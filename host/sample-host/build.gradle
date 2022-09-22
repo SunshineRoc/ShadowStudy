@@ -86,15 +86,17 @@ def createCopyTask(projectName, buildType, name, apkName, inputFile, taskName) {
 
 def generateAssets(generateAssetsTask, buildType) {
 
-    // 把PluginManager打包为宿主 build 的 assets 目录中的plugin-manager.apk
+    /*
+      第一步：把PluginManager复制到宿主 build 的 assets 目录中
+      */
     def moduleName = 'sample-manager'
     def pluginManagerApkFile = file(
-            "${project(":sample-manager").getBuildDir()}" +
+            "${project(":$moduleName").getBuildDir()}" +
                     "/outputs/apk/${buildType}/" +
                     "${moduleName}-${buildType}.apk"
     )
     generateAssetsTask.dependsOn createCopyTask(
-            ':sample-manager',
+            ":$moduleName",
             buildType,
             moduleName,
             'plugin-manager.apk',
@@ -102,42 +104,75 @@ def generateAssets(generateAssetsTask, buildType) {
             "assemble${buildType.capitalize()}"
     )
 
-    // 插件zip包的原文件
-    def pluginZip = file("${getRootProject().getBuildDir()}/plugin-${buildType}.zip")
-
-    // 把插件1打包到宿主 build 的 assets 目录中的plugin1-debug/release.zip文件中
+    /*
+      第二步：把runtime复制到宿主 build 的 assets 目录中
+     */
+    def runtimeModule = 'sample-runtime'
+    def runtimeApkFile = file(
+            "${project(":$runtimeModule").getBuildDir()}" +
+                    "/outputs/apk/${buildType}/" +
+                    "${runtimeModule}-${buildType}.apk"
+    )
     generateAssetsTask.dependsOn createCopyTask(
-            ':sample-app1',                                // 模块名称
-            buildType,                                     // 打包类型：debug或release
-            'plugin-zip',                                  // zip包所在的目录的名称
-            "plugin1-${buildType}.zip",                    // zip包的名称
-            pluginZip,                                     // 待复制的原文件
-            "package${buildType.capitalize()}Plugin"       // 任务的名称
+            ":$runtimeModule",
+            buildType,
+            runtimeModule,
+            "$runtimeModule-${buildType}.apk",
+            runtimeApkFile,
+            "assemble${buildType.capitalize()}"
     )
 
-    // 把插件2打包到宿主 build 的 assets 目录中的plugin2-debug/release.zip文件中
-//    generateAssetsTask.dependsOn createCopyTask(
-//            ':sample-app2',
-//            buildType,
-//            'plugin-zip',
-//            "plugin2-${buildType}.zip",
-//            pluginZip,
-//            "package${buildType.capitalize()}Plugin"
-//    )
+    /*
+      第三步：把loader复制到宿主 build 的 assets 目录中
+     */
+    def loaderModule = 'sample-loader'
+    def loaderApkFile = file(
+            "${project(":$loaderModule").getBuildDir()}" +
+                    "/outputs/apk/${buildType}/" +
+                    "${loaderModule}-${buildType}.apk"
+    )
+    generateAssetsTask.dependsOn createCopyTask(
+            ":$loaderModule",
+            buildType,
+            loaderModule,
+            "$loaderModule-${buildType}.apk",
+            loaderApkFile,
+            "assemble${buildType.capitalize()}"
+    )
 
-    // 把插件3打包到宿主 build 的 assets 目录中的plugin3-debug/release.zip文件中
-//    generateAssetsTask.dependsOn createCopyTask(
-//            ':sample-app3',
-//            buildType,
-//            'plugin-zip',
-//            "plugin3-${buildType}.zip",
-//            pluginZip,
-//            "package${buildType.capitalize()}Plugin"
-//    )
+    /*
+      第四步：把插件1的apk包和config.json复制到宿主 build 的 assets 目录中
+     */
+    def pluginOneModule = 'sample-app1'
+    def pluginOneApkFile = file(
+            "${project(":$pluginOneModule").getBuildDir()}" +
+                    "/outputs/apk/plugin/${buildType}/" +
+                    "${pluginOneModule}-plugin-${buildType}.apk"
+    )
+    generateAssetsTask.dependsOn createCopyTask(
+            ":$pluginOneModule",
+            buildType,
+            pluginOneModule,
+            "$pluginOneModule-plugin-${buildType}.apk",
+            pluginOneApkFile,
+            "assemble${buildType.capitalize()}"
+    )
+    def pluginOneConfigFile = file(
+            "${project(":$pluginOneModule").getBuildDir()}" +
+                    "/intermediates/generatePluginConfig/${buildType}/config.json"
+    )
+    generateAssetsTask.dependsOn createCopyTask(
+            ":$pluginOneModule",
+            buildType,
+            pluginOneModule,
+            "$pluginOneModule-${buildType}-config.json",
+            pluginOneConfigFile,
+            "assemble${buildType.capitalize()}"
+    )
 
-    println("generateAssets() ==》 打包：getRootProject().getBuildDir()=${getRootProject().getBuildDir()}" +
-            "，buildType=$buildType" +
-            "，pluginZip.path=" + pluginZip.path)
+//    println("generateAssets() ==》 打包：getBuildDir()=${getBuildDir()}" +
+//            "，buildType=$buildType" +
+//            "，moduleName=" + moduleName + "\npluginOneApkFile.path" + pluginOneApkFile.path + "\npluginZip.pluginZip=" + pluginZip.path)
 }
 
 tasks.whenTaskAdded { task ->

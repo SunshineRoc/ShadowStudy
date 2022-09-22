@@ -52,6 +52,8 @@ internal fun createPackagePluginTask(project: Project, buildType: PluginBuildTyp
                 File(project.buildDir.absolutePath + "/intermediates/generatePluginConfig/${buildType.name}/config.json")
         targetConfigFile.parentFile.mkdirs()
 
+        println("打包任务，" +
+                "runtimeFile=${runtimeFile?.path}，loaderFile=${loaderFile?.path}，targetConfigFile=${targetConfigFile?.path}")
 
         //all plugin apks
         val pluginFiles: MutableList<File> = mutableListOf()
