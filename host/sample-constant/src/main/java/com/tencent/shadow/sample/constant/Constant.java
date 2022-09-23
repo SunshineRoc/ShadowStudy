@@ -29,8 +29,12 @@ final public class Constant {
     public static final String PART_KEY_PLUGIN_APP_TWO = "sample-plugin-app2"; // 插件2的partKey，必须与build.gradle中插件2的partKey一致
     public static final String PART_KEY_PLUGIN_APP_THREE = "sample-plugin-app3"; // 插件3的partKey，必须与build.gradle中插件3的partKey一致
 
-    public static final String SD_DIRECTORY_NAME = "/ShadowStudy"; // 当前APP在SD卡中保存插件的目录名
-    public static final String PLUGIN_MANAGER_APK_NAME = "plugin-manager.apk"; // 动态加载的插件管理apk文件名
+    public static final String FILE_NAME_SD_DIRECTORY = "/ShadowStudy"; // 文件名 - 当前APP在SD卡中保存插件的目录名
+    public static final String FILE_NAME_PLUGIN_MANAGER = "plugin-manager.apk"; // apk文件名 - plugin-manager的apk文件
+    public static final String FILE_NAME_RUNTIME = "sample-runtime-debug.apk"; // apk文件名 - runtime的apk文件
+    public static final String FILE_NAME_LOADER = "sample-loader-debug.apk"; // apk文件名 - loader的apk文件
+    public static final String FILE_NAME_PLUGIN_ONE_APK = "sample-app1-plugin-debug.apk"; // apk文件名 - 插件1的apk文件
+    public static final String FILE_NAME_PLUGIN_ONE_CONFIG = "sample-app1-config-debug.json"; // apk文件名 - 插件1的config文件
 
     public static final String PLUGIN_ZIP_PREFIX = "plugin"; // 插件包的前缀
     public static final String PLUGIN_ZIP_DEBUG_SUFFIX = "-debug.zip"; // 插件包后缀：debug模式

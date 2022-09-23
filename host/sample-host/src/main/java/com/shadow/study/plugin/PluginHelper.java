@@ -18,8 +18,8 @@
 
 package com.shadow.study.plugin;
 
-import static com.tencent.shadow.sample.constant.Constant.PLUGIN_MANAGER_APK_NAME;
-import static com.tencent.shadow.sample.constant.Constant.SD_DIRECTORY_NAME;
+import static com.tencent.shadow.sample.constant.Constant.FILE_NAME_PLUGIN_MANAGER;
+import static com.tencent.shadow.sample.constant.Constant.FILE_NAME_SD_DIRECTORY;
 
 import android.content.Context;
 import android.os.Environment;
@@ -83,19 +83,62 @@ public class PluginHelper {
     }
 
     /**
+     * 从SD卡中把 ShadowStudy 中的文件都复制到 /data/user/0/APP包名/files/ 目录中
+     */
+    public void installFromSDPluginDirectory() {
+        singlePool.execute(() -> {
+            try {
+                if (TextUtils.isEmpty(pluginSDSourcePath)) {
+                    String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    pluginSDSourcePath = sdPath + FILE_NAME_SD_DIRECTORY;
+                }
+
+                // 创建文件夹
+                File pluginSourceFile = new File(pluginSDSourcePath);
+                if (!pluginSourceFile.exists()) {
+                    pluginSourceFile.mkdirs();
+                }
+
+                File destinationFile; // 目标文件夹
+                InputStream sourceFileIS; // 源文件的IO流
+                for (File file : pluginSourceFile.listFiles()) {
+//                    LoggerFactory.getLogger(PluginHelper.class).info("installFromPluginDirectory() ==> 插件路径：file.getName()=" + file.getName()
+//                            + "\nfile.getAbsolutePath()=" + file.getAbsolutePath() + "\nmContext.getFilesDir()=" + mContext.getFilesDir());
+
+                    sourceFileIS = new FileInputStream(file);
+                    destinationFile = new File(mContext.getFilesDir(), file.getName());
+                    FileUtils.copyInputStreamToFile(sourceFileIS, destinationFile);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("从SD卡中复制apk出错", e);
+            }
+        });
+    }
+
+    /**
+     * 从 /data/user/0/APP包名/files/ 目录中获取指定文件
+     *
+     * @param fileName 文件名
+     */
+    public File getDestinationFile(String fileName) {
+        return new File(mContext.getFilesDir(), fileName);
+    }
+
+    /**
      * 把插件管理apk复制到 /data/user/0/APP包名/files/ 目录中
      */
     public void installPluginManager() {
 
         singlePool.execute(() -> {
             // 创建插件管理apk包被复制后的文件
-            pluginManagerDestinationFile = new File(mContext.getFilesDir(), PLUGIN_MANAGER_APK_NAME);
+            pluginManagerDestinationFile = new File(mContext.getFilesDir(), FILE_NAME_PLUGIN_MANAGER);
 
             // 从 build的assets 中把 pluginmanager.apk 复制到 /data/user/0/APP包名/files/ 目录中
-            copyPluginManagerFromAssets();
+//            copyPluginManagerFromAssets();
 
-            // 从SD卡中把 pluginmanager.apk 复制到 /data/user/0/APP包名/files/ 目录中
-//            copyPluginManagerFromSD();
+            // 从SD卡中把 plugin-manager.apk 复制到 /data/user/0/APP包名/files/ 目录中
+            copyPluginManagerFromSD();
         });
     }
 
@@ -112,10 +155,10 @@ public class PluginHelper {
             copyPluginZipPrepare(number);
 
             // 从 assets 中复制插件
-            copyPluginZipFromAssets(number);
+//            copyPluginZipFromAssets(number);
 
             // 从SD卡中复制插件
-//            copyPluginZipFromSD(number);
+            copyPluginZipFromSD(number);
         });
     }
 
@@ -145,29 +188,30 @@ public class PluginHelper {
     }
 
     /**
-     * 从 build的assets 中把 pluginmanager.apk 复制到 /data/user/0/APP包名/files/ 目录中
+     * 从 build的assets 中把 plugin-manager.apk 复制到 /data/user/0/APP包名/files/ 目录中
      */
     private void copyPluginManagerFromAssets() {
         try {
             LoggerFactory.getLogger(PluginHelper.class).info("copyPluginManagerFromAssets() ==> 插件路径：" + mContext.getAssets()
                     + "\npluginManagerDestinationFile.getAbsolutePath()=" + pluginManagerDestinationFile.getAbsolutePath());
 
-            InputStream is = mContext.getAssets().open(PLUGIN_MANAGER_APK_NAME);
+            InputStream is = mContext.getAssets().open(FILE_NAME_PLUGIN_MANAGER);
             FileUtils.copyInputStreamToFile(is, pluginManagerDestinationFile);
         } catch (IOException e) {
+            e.printStackTrace();
             throw new RuntimeException("从assets中复制apk出错", e);
         }
     }
 
     /**
-     * 从 SD卡的 ShadowStudy 目录中把 pluginmanager.apk 复制到 /data/user/0/APP包名/files/ 目录中。
+     * 从 SD卡的 ShadowStudy 目录中把 plugin-manager.apk 复制到 /data/user/0/APP包名/files/ 目录中。
      * 热更新时，可以把 pluginmanager.apk 下载到SD卡中，然后从SD卡中复制到对应目录，再加载。
      */
     private void copyPluginManagerFromSD() {
         try {
             if (TextUtils.isEmpty(pluginSDSourcePath)) {
                 String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-                pluginSDSourcePath = sdPath + SD_DIRECTORY_NAME;
+                pluginSDSourcePath = sdPath + FILE_NAME_SD_DIRECTORY;
             }
 
             // 创建路径
@@ -176,8 +220,8 @@ public class PluginHelper {
                 pluginSourceFile.mkdirs();
             }
 
-            // 复制 pluginmanager.apk
-            File pluginManagerSource = new File(pluginSDSourcePath, PLUGIN_MANAGER_APK_NAME);
+            // 复制 plugin-manager.apk
+            File pluginManagerSource = new File(pluginSDSourcePath, FILE_NAME_PLUGIN_MANAGER);
             if (pluginManagerSource.exists()) {
                 InputStream pluginManagerIS = new FileInputStream(pluginManagerSource);
                 FileUtils.copyInputStreamToFile(pluginManagerIS, pluginManagerDestinationFile);
@@ -214,7 +258,7 @@ public class PluginHelper {
         try {
             if (TextUtils.isEmpty(pluginSDSourcePath)) {
                 String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-                pluginSDSourcePath = sdPath + SD_DIRECTORY_NAME;
+                pluginSDSourcePath = sdPath + FILE_NAME_SD_DIRECTORY;
             }
 
             // 创建路径
@@ -234,6 +278,7 @@ public class PluginHelper {
                     + "\npluginZipSource.exists()=" + pluginZipSource.exists()
                     + "\npluginZipDestinationFile.getAbsolutePath()=" + pluginZipFileMap.get(number).getAbsolutePath());
         } catch (IOException e) {
+            e.printStackTrace();
             throw new RuntimeException("从SD卡中复制apk出错", e);
         }
     }

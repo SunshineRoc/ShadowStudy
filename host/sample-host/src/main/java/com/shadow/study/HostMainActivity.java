@@ -63,8 +63,10 @@ public class HostMainActivity extends AppCompatActivity {
      * 安装插件
      */
     private void installPlugin() {
-        PluginHelper.getInstance().installPluginManager();
-        PluginHelper.getInstance().installPlugin("1");
+        PluginHelper.getInstance().installFromSDPluginDirectory();
+
+//        PluginHelper.getInstance().installPluginManager();
+//        PluginHelper.getInstance().installPlugin("1");
 //        PluginHelper.getInstance().installPlugin("2");
 //        PluginHelper.getInstance().installPlugin("3");
     }
@@ -79,11 +81,10 @@ public class HostMainActivity extends AppCompatActivity {
     private void loadPlugin(String partKey, String number, String className) {
         PluginHelper.getInstance().singlePool.execute(() -> {
 
-            LoggerFactory.getLogger(PluginHelper.class).info("loadPlugin() ==> 准备打开插件，插件路径：" + PluginHelper.getInstance().getPluginZipFile(number).getAbsolutePath()
-                    + "，context=" + HostMainActivity.this + "，getApplicationContext()=" + HostMainActivity.this.getApplicationContext());
+            LoggerFactory.getLogger(PluginHelper.class).info("loadPlugin() ==> 准备打开插件，context=" + HostMainActivity.this + "，getApplicationContext()=" + HostMainActivity.this.getApplicationContext());
 
             // 根据插件apk包，创建PluginManager
-            HostApplication.getApplication().loadPluginManager(PluginHelper.getInstance().pluginManagerDestinationFile);
+            HostApplication.getApplication().loadPluginManager(PluginHelper.getInstance().getDestinationFile(Constant.FILE_NAME_PLUGIN_MANAGER));
 
             Bundle bundle = new Bundle();
             // 插件路径
