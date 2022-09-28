@@ -109,7 +109,8 @@ public class SamplePluginManager extends FastPluginManager {
     }
 
     private void onStartActivity(final Context context, Bundle bundle, final EnterCallback callback) {
-        final String pluginZipPath = bundle.getString(Constant.KEY_PLUGIN_ZIP_PATH);
+        LoggerFactory.getLogger(SamplePluginManager.class).info("onStartActivity() ==> 打开插件启动页：bundle=" + bundle);
+
         final String partKey = bundle.getString(Constant.KEY_PLUGIN_PART_KEY);
         final String className = bundle.getString(Constant.KEY_ACTIVITY_CLASSNAME);
 
@@ -126,12 +127,11 @@ public class SamplePluginManager extends FastPluginManager {
         executorService.execute(() -> {
             try {
                 // 安装插件
-                InstalledPlugin installedPlugin = installPlugin(pluginZipPath, null, true);
+                InstalledPlugin installedPlugin = installPlugin(context.getFilesDir(), true);
 
                 LoggerFactory.getLogger(SamplePluginManager.class).info("onStartActivity() ==> 打开插件启动页：" +
                         "\npartKey=" + partKey
                         + "，installedPlugin.UUID=" + installedPlugin.UUID
-                        + "，pluginZipPath=" + pluginZipPath
                         + "\nclassName=" + className);
 
                 // 加载插件
@@ -139,10 +139,6 @@ public class SamplePluginManager extends FastPluginManager {
 
                 // 调用插件APP
                 callApplicationOnCreate(partKey);
-
-//                callApplicationOnCreate(PART_KEY_PLUGIN_APP_ONE);
-//                callApplicationOnCreate(PART_KEY_PLUGIN_APP_TWO);
-//                callApplicationOnCreate(PART_KEY_PLUGIN_APP_THREE);
 
                 Intent pluginIntent = new Intent();
                 pluginIntent.setClassName(
@@ -162,6 +158,7 @@ public class SamplePluginManager extends FastPluginManager {
                 // 在插件进程中打开插件启动页
                 mPluginLoader.startActivityInPluginProcess(intent);
             } catch (Exception e) {
+                e.printStackTrace();
                 throw new RuntimeException(e);
             }
             if (callback != null) {

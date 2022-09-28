@@ -86,6 +86,24 @@ def createCopyTask(projectName, buildType, name, apkName, inputFile, taskName) {
 
 def generateAssets(generateAssetsTask, buildType) {
 
+    /*
+     准备工作：
+     打zip包时，会调用CreatePackagePluginTask.kt中的createPackagePluginTask()方法，
+     从而在sample-app1的build/intermediates/generatePluginConfig中创建config.json文件。
+     后面可探究不打zip包，直接创建config.json文件的方法。
+      */
+    // 插件zip包的原文件
+    def pluginZip = file("${getRootProject().getBuildDir()}/plugin-${buildType}.zip")
+    // 把插件1打包到宿主 build 的 assets 目录中的plugin1-debug/release.zip文件中
+    generateAssetsTask.dependsOn createCopyTask(
+            ':sample-app1',                                // 模块名称
+            buildType,                                     // 打包类型：debug或release
+            'plugin-zip',                                  // zip包所在的目录的名称
+            "plugin1-${buildType}.zip",                    // zip包的名称
+            pluginZip,                                     // 待复制的原文件
+            "package${buildType.capitalize()}Plugin"       // 任务的名称
+    )
+
     // plugin-manager、runtime、loader和插件存放在assets中的文件夹的名字
     def directoryName = "plugin-directory"
 
@@ -173,9 +191,9 @@ def generateAssets(generateAssetsTask, buildType) {
             "assemble${buildType.capitalize()}"
     )
 
-//    println("generateAssets() ==》 打包：getBuildDir()=${getBuildDir()}" +
-//            "，buildType=$buildType" +
-//            "，moduleName=" + moduleName + "\npluginOneApkFile.path" + pluginOneApkFile.path + "\npluginZip.pluginZip=" + pluginZip.path)
+    println("generateAssets() ==》 打包：getBuildDir()=${getBuildDir()}" +
+            "，buildType=$buildType" +
+            "\npluginOneApkFile.path" + pluginOneApkFile.path + "\npluginOneConfigFile.path=" + pluginOneConfigFile.path)
 }
 
 tasks.whenTaskAdded { task ->

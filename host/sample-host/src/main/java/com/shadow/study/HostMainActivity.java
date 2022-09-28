@@ -88,7 +88,7 @@ public class HostMainActivity extends AppCompatActivity {
 
             Bundle bundle = new Bundle();
             // 插件路径
-            bundle.putString(Constant.KEY_PLUGIN_ZIP_PATH, PluginHelper.getInstance().getPluginZipFile(number).getAbsolutePath());
+//            bundle.putString(Constant.KEY_PLUGIN_ZIP_PATH, PluginHelper.getInstance().getPluginZipFile(number).getAbsolutePath());
             // 插件Key
             bundle.putString(Constant.KEY_PLUGIN_PART_KEY, partKey);
             // 宿主加载插件时显示的启动页，该启动页显示在插件进程中

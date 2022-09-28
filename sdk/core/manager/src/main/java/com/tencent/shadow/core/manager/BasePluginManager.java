@@ -41,8 +41,12 @@ import com.tencent.shadow.core.manager.installplugin.UnpackManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.LinkedHashSet;
@@ -121,6 +125,28 @@ public abstract class BasePluginManager {
         }
 
         return pluginConfig;
+    }
+
+    /**
+     * 获取插件的config.json文件
+     *
+     * @param sourceDirectory 插件所在的源目录
+     * @param configFileName  config.json的完整名字
+     */
+    public final PluginConfig getPluginConfig(File sourceDirectory, String configFileName) throws IOException, JSONException {
+
+        LoggerFactory.getLogger(BasePluginManager.class).info("getPluginConfig() ==> 安装插件：" +
+                "\nsourceDirectory=" + sourceDirectory
+                + "，configFileName=" + configFileName);
+
+        InputStream inputStream = new FileInputStream(sourceDirectory.getAbsolutePath() + "/" + configFileName);
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String line; (line = bufferedReader.readLine()) != null; ) {
+            stringBuilder.append(line);
+        }
+        JSONObject configJson = new JSONObject(stringBuilder.toString());
+        return PluginConfig.parseFromJson(configJson, sourceDirectory);
     }
 
     /**

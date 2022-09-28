@@ -29,6 +29,7 @@ import com.tencent.shadow.core.manager.installplugin.InstalledType;
 import com.tencent.shadow.core.manager.installplugin.PluginConfig;
 import com.tencent.shadow.dynamic.host.FailedException;
 import com.tencent.shadow.dynamic.manager.PluginManagerThatUseDynamicLoader;
+import com.tencent.shadow.sample.constant.Constant;
 
 import org.json.JSONException;
 
@@ -59,17 +60,28 @@ public abstract class FastPluginManager extends PluginManagerThatUseDynamicLoade
 
     /**
      * 安装插件
-     * 1、从zip包中解压插件
+     * 1、从 /data/user/0/APP包名/files/ 目录中获取config.json文件
      * 2、oDex优化 runtime 和 loader
      * 3、oDex优化 插件
      * 4、触发插件安装完成时的回调
      * 5、获取已安装的插件
+     *
+     * @param sourceDirectory 插件安装前所在的目录
+     * @param odex            是否oDex
      */
-    public InstalledPlugin installPlugin(String zip, String hash, boolean odex) throws IOException, JSONException, InterruptedException, ExecutionException {
+    public InstalledPlugin installPlugin(File sourceDirectory, boolean odex) throws IOException, JSONException, InterruptedException, ExecutionException {
         /*
-          从zip包中解压插件
+          从 /data/user/0/APP包名/files/ 目录中获取config.json文件
           */
-        final PluginConfig pluginConfig = installPluginFromZip(new File(zip), hash);
+        PluginConfig pluginConfig = getPluginConfig(sourceDirectory, Constant.FILE_NAME_PLUGIN_ONE_CONFIG);
+        LoggerFactory.getLogger(FastPluginManager.class).info("installPlugin() ==> 安装插件：sourceDirectory=" + sourceDirectory + "，pluginConfig=" + pluginConfig);
+        if (pluginConfig != null) {
+            LoggerFactory.getLogger(FastPluginManager.class).info("installPlugin() ==> 安装插件：" +
+                    "\nUUID=" + pluginConfig.UUID
+                    + "，UUID_NickName=" + pluginConfig.UUID_NickName
+                    + "，version=" + pluginConfig.version);
+        }
+
         final String uuid = pluginConfig.UUID;
         List<Future> futures = new LinkedList<>();
         List<Future<Pair<String, String>>> extractSoFutures = new LinkedList<>();
