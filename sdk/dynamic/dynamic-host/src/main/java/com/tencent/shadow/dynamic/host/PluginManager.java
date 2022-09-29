@@ -29,6 +29,13 @@ import android.os.Bundle;
 public interface PluginManager {
 
     /**
+     * 安装runtime、loader和插件
+     *
+     * @param context context
+     */
+    void install(Context context);
+
+    /**
      * @param context  context
      * @param fromId   标识本次请求的来源位置，用于区分入口
      * @param bundle   参数列表

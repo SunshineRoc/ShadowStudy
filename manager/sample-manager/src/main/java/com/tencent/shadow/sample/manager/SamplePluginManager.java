@@ -80,6 +80,15 @@ public class SamplePluginManager extends FastPluginManager {
     }
 
     @Override
+    public void install(Context context) {
+        try {
+            installPlugin(context.getFilesDir(), true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void enter(final Context context, long fromId, Bundle bundle, final EnterCallback callback) {
         if (fromId == Constant.FROM_ID_NOOP) {
             //do nothing.
@@ -126,13 +135,8 @@ public class SamplePluginManager extends FastPluginManager {
 
         executorService.execute(() -> {
             try {
-                // 安装插件
-                InstalledPlugin installedPlugin = installPlugin(context.getFilesDir(), true);
-
-                LoggerFactory.getLogger(SamplePluginManager.class).info("onStartActivity() ==> 打开插件启动页：" +
-                        "\npartKey=" + partKey
-                        + "，installedPlugin.UUID=" + installedPlugin.UUID
-                        + "\nclassName=" + className);
+                // 已安装的插件信息，包括runtime、loader、插件的信息
+                InstalledPlugin installedPlugin = getInstallPluginInfo();
 
                 // 加载插件
                 loadPlugin(installedPlugin.UUID, partKey);

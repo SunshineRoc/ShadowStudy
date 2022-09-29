@@ -186,7 +186,7 @@ def generateAssets(generateAssetsTask, buildType) {
             ":$pluginOneModule",
             buildType,
             directoryName,
-            "$pluginOneModule-config-${buildType}.json",
+            "config.json",
             pluginOneConfigFile,
             "assemble${buildType.capitalize()}"
     )

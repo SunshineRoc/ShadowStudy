@@ -26,6 +26,7 @@ import android.os.Environment;
 import android.text.TextUtils;
 
 import com.shadow.study.BuildConfig;
+import com.shadow.study.HostApplication;
 import com.tencent.shadow.core.common.LoggerFactory;
 import com.tencent.shadow.sample.constant.Constant;
 
@@ -83,37 +84,65 @@ public class PluginHelper {
     }
 
     /**
+     * 1、从SD卡中把 ShadowStudy 中的文件都复制到 /data/user/0/APP包名/files/ 目录中
+     * 2、安装 plugin-manager、runtime、loader和插件apk
+     */
+    public void installFromSDPluginDirectory(Context context) {
+        singlePool.execute(() -> {
+            /*
+              第一步：从SD卡中把 ShadowStudy 中的文件都复制到 /data/user/0/APP包名/files/ 目录中
+              */
+            copyFilesFromSDPluginDirectory();
+
+            /*
+              第二步：安装插件
+              */
+            installPluginManager(context);
+        });
+    }
+
+    /**
      * 从SD卡中把 ShadowStudy 中的文件都复制到 /data/user/0/APP包名/files/ 目录中
      */
-    public void installFromSDPluginDirectory() {
-        singlePool.execute(() -> {
-            try {
-                if (TextUtils.isEmpty(pluginSDSourcePath)) {
-                    String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-                    pluginSDSourcePath = sdPath + FILE_NAME_SD_DIRECTORY;
-                }
+    private void copyFilesFromSDPluginDirectory() {
+        try {
+            if (TextUtils.isEmpty(pluginSDSourcePath)) {
+                String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+                pluginSDSourcePath = sdPath + FILE_NAME_SD_DIRECTORY;
+            }
 
-                // 创建文件夹
-                File pluginSourceFile = new File(pluginSDSourcePath);
-                if (!pluginSourceFile.exists()) {
-                    pluginSourceFile.mkdirs();
-                }
+            // 创建文件夹
+            File pluginSourceFile = new File(pluginSDSourcePath);
+            if (!pluginSourceFile.exists()) {
+                pluginSourceFile.mkdirs();
+            }
 
-                File destinationFile; // 目标文件夹
-                InputStream sourceFileIS; // 源文件的IO流
-                for (File file : pluginSourceFile.listFiles()) {
+            File destinationFile; // 目标文件夹
+            InputStream sourceFileIS; // 源文件的IO流
+            for (File file : pluginSourceFile.listFiles()) {
 //                    LoggerFactory.getLogger(PluginHelper.class).info("installFromPluginDirectory() ==> 插件路径：file.getName()=" + file.getName()
 //                            + "\nfile.getAbsolutePath()=" + file.getAbsolutePath() + "\nmContext.getFilesDir()=" + mContext.getFilesDir());
 
-                    sourceFileIS = new FileInputStream(file);
-                    destinationFile = new File(mContext.getFilesDir(), file.getName());
-                    FileUtils.copyInputStreamToFile(sourceFileIS, destinationFile);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                throw new RuntimeException("从SD卡中复制apk出错", e);
+                sourceFileIS = new FileInputStream(file);
+                destinationFile = new File(mContext.getFilesDir(), file.getName());
+                FileUtils.copyInputStreamToFile(sourceFileIS, destinationFile);
             }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 安装 plugin-manager、runtime、loader和插件apk
+     *
+     * @param context
+     */
+    private void installPluginManager(Context context) {
+        // 安装plugin-manager
+        HostApplication.getApplication().loadPluginManager(PluginHelper.getInstance().getDestinationFile(Constant.FILE_NAME_PLUGIN_MANAGER));
+
+        // 安装runtime、loader和插件
+        HostApplication.getApplication().getPluginManager().install(context);
     }
 
     /**

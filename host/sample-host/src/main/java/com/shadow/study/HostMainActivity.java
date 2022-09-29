@@ -63,7 +63,7 @@ public class HostMainActivity extends AppCompatActivity {
      * 安装插件
      */
     private void installPlugin() {
-        PluginHelper.getInstance().installFromSDPluginDirectory();
+        PluginHelper.getInstance().installFromSDPluginDirectory(HostMainActivity.this);
 
 //        PluginHelper.getInstance().installPluginManager();
 //        PluginHelper.getInstance().installPlugin("1");
@@ -82,9 +82,6 @@ public class HostMainActivity extends AppCompatActivity {
         PluginHelper.getInstance().singlePool.execute(() -> {
 
             LoggerFactory.getLogger(PluginHelper.class).info("loadPlugin() ==> 准备打开插件，context=" + HostMainActivity.this + "，getApplicationContext()=" + HostMainActivity.this.getApplicationContext());
-
-            // 根据插件apk包，创建PluginManager
-            HostApplication.getApplication().loadPluginManager(PluginHelper.getInstance().getDestinationFile(Constant.FILE_NAME_PLUGIN_MANAGER));
 
             Bundle bundle = new Bundle();
             // 插件路径

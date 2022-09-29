@@ -60,20 +60,20 @@ public abstract class FastPluginManager extends PluginManagerThatUseDynamicLoade
 
     /**
      * 安装插件
+     * <p>
      * 1、从 /data/user/0/APP包名/files/ 目录中获取config.json文件
      * 2、oDex优化 runtime 和 loader
      * 3、oDex优化 插件
-     * 4、触发插件安装完成时的回调
-     * 5、获取已安装的插件
+     * 4、插件安装完成时，把runtime、loader、插件信息保存到数据中
      *
      * @param sourceDirectory 插件安装前所在的目录
-     * @param odex            是否oDex
+     * @param oDex            是否oDex
      */
-    public InstalledPlugin installPlugin(File sourceDirectory, boolean odex) throws IOException, JSONException, InterruptedException, ExecutionException {
+    public void installPlugin(File sourceDirectory, boolean oDex) throws IOException, JSONException, InterruptedException, ExecutionException {
         /*
           从 /data/user/0/APP包名/files/ 目录中获取config.json文件
           */
-        PluginConfig pluginConfig = getPluginConfig(sourceDirectory, Constant.FILE_NAME_PLUGIN_ONE_CONFIG);
+        PluginConfig pluginConfig = getPluginConfig(sourceDirectory, Constant.FILE_NAME_CONFIG);
         LoggerFactory.getLogger(FastPluginManager.class).info("installPlugin() ==> 安装插件：sourceDirectory=" + sourceDirectory + "，pluginConfig=" + pluginConfig);
         if (pluginConfig != null) {
             LoggerFactory.getLogger(FastPluginManager.class).info("installPlugin() ==> 安装插件：" +
@@ -120,16 +120,16 @@ public abstract class FastPluginManager extends PluginManagerThatUseDynamicLoade
             Future<Pair<String, String>> extractSo = mFixedPool.submit(() -> extractSo(uuid, partKey, apkFile));
             futures.add(extractSo);
             extractSoFutures.add(extractSo);
-            if (odex) {
+            if (oDex) {
                 // oDex优化插件
-                Future odexPlugin = mFixedPool.submit(new Callable() {
+                Future oDexPlugin = mFixedPool.submit(new Callable() {
                     @Override
                     public Object call() throws Exception {
                         oDexPlugin(uuid, partKey, apkFile);
                         return null;
                     }
                 });
-                futures.add(odexPlugin);
+                futures.add(oDexPlugin);
             }
         }
 
@@ -141,10 +141,15 @@ public abstract class FastPluginManager extends PluginManagerThatUseDynamicLoade
             Pair<String, String> pair = future.get();
             soDirMap.put(pair.first, pair.second);
         }
-        // 插件安装完成时的回调
-        onInstallCompleted(pluginConfig, soDirMap);
 
-        // 获取已安装的插件
+        // 插件安装完成时，把插件信息保存到数据库中
+        onInstallCompleted(pluginConfig, soDirMap);
+    }
+
+    /**
+     * 获取已安装的runtime、loader和插件的信息
+     */
+    public InstalledPlugin getInstallPluginInfo() {
         return getInstalledPlugins(1).get(0);
     }
 
