@@ -82,11 +82,22 @@ shadow {
                 loaderApkConfig = new Tuple2('sample-loader-debug.apk', ':sample-loader:assembleDebug')
                 runtimeApkConfig = new Tuple2('sample-runtime-debug.apk', ':sample-runtime:assembleDebug')
                 pluginApks {
+                    // 插件1
                     pluginApk {
                         businessName = 'sample-plugin-app'
                         partKey = 'sample-plugin-app1'
                         buildTask = ':sample-app1:assemblePluginDebug'
                         apkPath = 'plugin/sample-app1/build/outputs/apk/plugin/debug/sample-app1-plugin-debug.apk'
+                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
+                    }
+
+                    // 插件3
+                    // 添加该配置后，插件1的config.json文件中可包含插件3的信息。
+                    pluginApk3 {
+                        businessName = 'sample-plugin-app3'
+                        partKey = 'sample-plugin-app3'
+                        buildTask = ':sample-app3:assemblePluginDebug'
+                        apkPath = 'plugin/sample-app3/build/outputs/apk/plugin/debug/sample-app3-plugin-debug.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                     }
                 }
@@ -96,11 +107,21 @@ shadow {
                 loaderApkConfig = new Tuple2('sample-loader-release.apk', ':sample-loader:assembleRelease')
                 runtimeApkConfig = new Tuple2('sample-runtime-release.apk', ':sample-runtime:assembleRelease')
                 pluginApks {
+                    // 插件1
                     pluginApk {
                         businessName = 'sample-plugin-app'
                         partKey = 'sample-plugin-app1'
                         buildTask = ':sample-app1:assemblePluginRelease'
                         apkPath = 'plugin/sample-app1/build/outputs/apk/plugin/release/sample-app1-plugin-release.apk'
+                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
+                    }
+
+                    // 插件3
+                    pluginApk3 {
+                        businessName = 'sample-plugin-app3'
+                        partKey = 'sample-plugin-app3'
+                        buildTask = ':sample-app3:assemblePluginRelease'
+                        apkPath = 'plugin/sample-app3/build/outputs/apk/plugin/release/sample-app3-plugin-release.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                     }
                 }

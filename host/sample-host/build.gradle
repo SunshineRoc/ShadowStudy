@@ -94,12 +94,12 @@ def generateAssets(generateAssetsTask, buildType) {
       */
     // 插件zip包的原文件
     def pluginZip = file("${getRootProject().getBuildDir()}/plugin-${buildType}.zip")
-    // 把插件1打包到宿主 build 的 assets 目录中的plugin1-debug/release.zip文件中
+    // 把插件1和插件3打包到宿主 build 的 assets 目录中的plugin-debug/release.zip文件中
     generateAssetsTask.dependsOn createCopyTask(
             ':sample-app1',                                // 模块名称
             buildType,                                     // 打包类型：debug或release
             'plugin-zip',                                  // zip包所在的目录的名称
-            "plugin1-${buildType}.zip",                    // zip包的名称
+            "plugin-${buildType}.zip",                     // zip包的名称
             pluginZip,                                     // 待复制的原文件
             "package${buildType.capitalize()}Plugin"       // 任务的名称
     )
@@ -188,6 +188,24 @@ def generateAssets(generateAssetsTask, buildType) {
             directoryName,
             "$pluginOneModule-config-${buildType}.json",
             pluginOneConfigFile,
+            "assemble${buildType.capitalize()}"
+    )
+
+    /*
+      第五步：把插件3的apk包复制到宿主 build 的 assets 目录中
+     */
+    def pluginThreeModule = 'sample-app3'
+    def pluginThreeApkFile = file(
+            "${project(":$pluginThreeModule").getBuildDir()}" +
+                    "/outputs/apk/plugin/${buildType}/" +
+                    "${pluginThreeModule}-plugin-${buildType}.apk"
+    )
+    generateAssetsTask.dependsOn createCopyTask(
+            ":$pluginThreeModule",
+            buildType,
+            directoryName,
+            "$pluginThreeModule-plugin-${buildType}.apk",
+            pluginThreeApkFile,
             "assemble${buildType.capitalize()}"
     )
 
