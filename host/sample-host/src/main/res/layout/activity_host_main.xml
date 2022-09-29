@@ -63,5 +63,6 @@
         android:background="@color/purple_200"
         android:text="卸载插件"
         android:textColor="@color/white"
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        android:visibility="gone" />
 </LinearLayout>

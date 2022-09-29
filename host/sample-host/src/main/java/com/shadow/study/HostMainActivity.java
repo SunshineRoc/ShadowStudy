@@ -146,6 +146,9 @@ public class HostMainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        HostApplication.getApplication().getPluginManager().enter(this, Constant.FROM_ID_CLOSE, null, null);
+
+        if (HostApplication.getApplication().getPluginManager() != null) {
+            HostApplication.getApplication().getPluginManager().enter(this, Constant.FROM_ID_CLOSE, null, null);
+        }
     }
 }

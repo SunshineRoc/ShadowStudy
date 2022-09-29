@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:text="SDK接入方首页"
+        android:text="SDK接入方APP首页"
         android:textColor="#000000"
         android:textSize="20sp" />
 
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="打开插件"
+        android:text="打开SDK首页"
         android:textSize="15sp"
         android:textColor="@color/white"
         android:background="@color/purple_200" />
