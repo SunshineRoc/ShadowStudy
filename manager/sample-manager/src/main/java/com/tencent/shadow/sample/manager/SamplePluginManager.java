@@ -22,6 +22,7 @@ import static com.tencent.shadow.sample.constant.Constant.PART_KEY_PLUGIN_APP_ON
 import static com.tencent.shadow.sample.constant.Constant.PART_KEY_PLUGIN_APP_THREE;
 import static com.tencent.shadow.sample.constant.Constant.PART_KEY_PLUGIN_APP_TWO;
 import static com.tencent.shadow.sample.constant.Constant.PART_KEY_PLUGIN_MAIN_APP;
+import static com.tencent.shadow.sample.constant.Constant.PART_KEY_PLUGIN_PROCESS_SERVICE_COMMON;
 
 import android.content.Context;
 import android.content.Intent;
@@ -65,6 +66,8 @@ public class SamplePluginManager extends FastPluginManager {
     protected String getPluginProcessServiceName(String partKey) {
         if (PART_KEY_PLUGIN_MAIN_APP.equals(partKey)) {
             return "com.shadow.study.plugin.PluginProcessPPS";
+        } else if (PART_KEY_PLUGIN_PROCESS_SERVICE_COMMON.equals(partKey)) {
+            return "com.shadow.study.plugin.PluginProcessPPS";
         } else if (PART_KEY_PLUGIN_APP_ONE.equals(partKey)) {
             return "com.shadow.study.plugin.PluginProcessPPS";
         } else if (PART_KEY_PLUGIN_APP_TWO.equals(partKey)) {
@@ -82,7 +85,12 @@ public class SamplePluginManager extends FastPluginManager {
     @Override
     public void install(Context context) {
         try {
+            // 安装runtime、loader和插件
             installPlugin(context.getFilesDir(), true);
+
+            // 获取runtime、loader、插件的安装信息，并加载runtime和loader
+            InstalledPlugin installedPlugin = getInstallPluginInfo();
+            loadPluginLoaderAndRuntime(installedPlugin.UUID, PART_KEY_PLUGIN_PROCESS_SERVICE_COMMON);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -135,11 +143,8 @@ public class SamplePluginManager extends FastPluginManager {
 
         executorService.execute(() -> {
             try {
-                // 已安装的插件信息，包括runtime、loader、插件的信息
-                InstalledPlugin installedPlugin = getInstallPluginInfo();
-
                 // 加载插件
-                loadPlugin(installedPlugin.UUID, partKey);
+                loadPlugin(partKey);
 
                 // 调用插件APP
                 callApplicationOnCreate(partKey);

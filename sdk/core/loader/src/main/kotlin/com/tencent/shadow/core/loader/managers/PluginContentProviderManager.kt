@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.pm.ProviderInfo
 import android.net.Uri
 import android.os.Bundle
+import com.tencent.shadow.core.common.LoggerFactory
 import com.tencent.shadow.core.loader.infos.ContainerProviderInfo
 import com.tencent.shadow.core.loader.infos.PluginParts
 import com.tencent.shadow.core.runtime.PluginManifest
@@ -71,9 +72,12 @@ class PluginContentProviderManager() : UriConverter.UriParseDelegate {
             pluginProviderInfo: PluginManifest.ProviderInfo,
             containerProviderInfo: ContainerProviderInfo
     ) {
-        if (providerMap.containsKey(pluginProviderInfo.authorities)) {
-            throw RuntimeException("重复添加 ContentProvider")
-        }
+
+        LoggerFactory.getLogger(PluginContentProviderManager::class.java).info("addContentProviderInfo() ==> 调用插件，" +
+                "pluginProviderInfo.authorities=${pluginProviderInfo.authorities}，" +
+                "value=${providerMap[pluginProviderInfo.authorities]}，" +
+                "containsKey()=${providerMap.containsKey(pluginProviderInfo.authorities)}，" +
+                "containerProviderInfo.authority=${containerProviderInfo.authority}")
 
         providerAuthorityMap[pluginProviderInfo.authorities] = containerProviderInfo.authority
         var pluginProviderInfos: HashSet<PluginManifest.ProviderInfo>? = null
@@ -104,6 +108,8 @@ class PluginContentProviderManager() : UriConverter.UriParseDelegate {
                 providerInfo.grantUriPermissions = it.grantUriPermissions
                 contentProvider?.attachInfo(context, providerInfo)
                 providerMap[it.authorities] = contentProvider
+
+                LoggerFactory.getLogger(PluginContentProviderManager::class.java).info("createContentProviderAndCallOnCreate() ==> 调用插件：it.authorities=${it.authorities}，contentProvider=$contentProvider")
             } catch (e: Exception) {
                 throw RuntimeException(
                         "partKey==$partKey className==${it.className} authorities==${it.authorities}",

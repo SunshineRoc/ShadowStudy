@@ -40,17 +40,17 @@ public class HostMainActivity extends AppCompatActivity {
 
         findViewById(ResourceUtils.getResourceId(HostMainActivity.this, "bt_load_plugin1")).setOnClickListener(v -> {
             // 加载插件1
-            loadPlugin(PART_KEY_PLUGIN_APP_ONE, "1", "com.tencent.shadow.sample.plugin1.PluginOneMainActivity");
+            loadPlugin(PART_KEY_PLUGIN_APP_ONE, "com.tencent.shadow.sample.plugin1.PluginOneMainActivity");
         });
 
         findViewById(ResourceUtils.getResourceId(HostMainActivity.this, "bt_load_plugin2")).setOnClickListener(v -> {
             // 加载插件2
-            loadPlugin(PART_KEY_PLUGIN_APP_TWO, "2", "com.tencent.shadow.sample.plugin2.PluginTwoMainActivity");
+            loadPlugin(PART_KEY_PLUGIN_APP_TWO, "com.tencent.shadow.sample.plugin2.PluginTwoMainActivity");
         });
 
         findViewById(ResourceUtils.getResourceId(HostMainActivity.this, "bt_load_plugin3")).setOnClickListener(v -> {
             // 加载插件3
-            loadPlugin(PART_KEY_PLUGIN_APP_THREE, "3", "com.tencent.shadow.sample.plugin3.PluginThreeMainActivity");
+            loadPlugin(PART_KEY_PLUGIN_APP_THREE, "com.tencent.shadow.sample.plugin3.PluginThreeMainActivity");
         });
 
         findViewById(ResourceUtils.getResourceId(HostMainActivity.this, "bt_uninstall_plugin")).setOnClickListener(v -> {
@@ -64,28 +64,20 @@ public class HostMainActivity extends AppCompatActivity {
      */
     private void installPlugin() {
         PluginHelper.getInstance().installFromSDPluginDirectory(HostMainActivity.this);
-
-//        PluginHelper.getInstance().installPluginManager();
-//        PluginHelper.getInstance().installPlugin("1");
-//        PluginHelper.getInstance().installPlugin("2");
-//        PluginHelper.getInstance().installPlugin("3");
     }
 
     /**
      * 加载插件
      *
      * @param partKey
-     * @param number
      * @param className
      */
-    private void loadPlugin(String partKey, String number, String className) {
+    private void loadPlugin(String partKey, String className) {
         PluginHelper.getInstance().singlePool.execute(() -> {
 
             LoggerFactory.getLogger(PluginHelper.class).info("loadPlugin() ==> 准备打开插件，context=" + HostMainActivity.this + "，getApplicationContext()=" + HostMainActivity.this.getApplicationContext());
 
             Bundle bundle = new Bundle();
-            // 插件路径
-//            bundle.putString(Constant.KEY_PLUGIN_ZIP_PATH, PluginHelper.getInstance().getPluginZipFile(number).getAbsolutePath());
             // 插件Key
             bundle.putString(Constant.KEY_PLUGIN_PART_KEY, partKey);
             // 宿主加载插件时显示的启动页，该启动页显示在插件进程中
