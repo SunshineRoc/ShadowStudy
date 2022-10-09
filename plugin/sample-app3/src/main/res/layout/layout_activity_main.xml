@@ -5,7 +5,9 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp">
 
     <TextView
         android:id="@+id/tv_msg"
@@ -33,4 +35,23 @@
         android:layout_marginTop="20dp"
         android:padding="15dp"
         android:text="显示Dialog" />
+
+    <Button
+        android:id="@+id/bt_request_network"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:padding="15dp"
+        android:text="OkHttp请求网络" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/tv_network_response"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </ScrollView>
 </LinearLayout>

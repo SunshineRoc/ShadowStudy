@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tencent.shadow.sample.plugin.app.lib.base.plugin">
 
+    <!-- 使用OkHttp时，宿主（sample-host）中必须添加这个权限 -->
+    <!--    <uses-permission android:name="android.permission.INTERNET"/>-->
+
     <application
         android:name="com.tencent.shadow.sample.plugin3.PluginThreeApplication"
         android:icon="@android:drawable/sym_def_app_icon"
