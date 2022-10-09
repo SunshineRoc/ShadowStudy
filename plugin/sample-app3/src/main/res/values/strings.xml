@@ -19,5 +19,10 @@
 <resources>
     <string name="confirm_text">确定</string>
     <string name="cancel_text">取消</string>
+
+    <string name="network_info_title">公告</string>
+    <string name="network_info_announcement_default_title">亲爱的各位用户：</string>
+    <string name="network_info_announcement_default_content">由于服务器升级维护，页面需暂时关闭，给您带来的不便，敬请谅解！</string>
+
 </resources>
 

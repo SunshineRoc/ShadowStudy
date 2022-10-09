@@ -20,6 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name="com.tencent.shadow.sample.plugin3.SecondActivity" />
     </application>
 </manifest>
 

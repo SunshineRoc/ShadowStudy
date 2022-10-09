@@ -1,6 +1,7 @@
 package com.tencent.shadow.sample.plugin3;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -48,6 +49,10 @@ public class PluginThreeMainActivity extends Activity {
             showDialog();
         });
 
+        findViewById(R.id.bt_show_view).setOnClickListener(v -> {
+            showCustomView();
+        });
+
         tvNetworkResponse = findViewById(R.id.tv_network_response);
         findViewById(R.id.bt_request_network).setOnClickListener(V -> {
             requestNetwork();
@@ -88,6 +93,13 @@ public class PluginThreeMainActivity extends Activity {
                     }
                 })
                 .show();
+    }
+
+    /**
+     * 打开自定义View
+     */
+    private void showCustomView() {
+        startActivity(new Intent(PluginThreeMainActivity.this, SecondActivity.class));
     }
 
     /**

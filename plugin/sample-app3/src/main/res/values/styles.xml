@@ -17,4 +17,12 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
+
+    <!-- 网络信息自定义控件 -->
+    <declare-styleable name="NetworkInfoView">
+        <!-- topTitle：控件头部标题 -->
+        <attr name="topTitle" format="string" />
+        <!-- information：信息标题和正文 -->
+        <attr name="information" format="string" />
+    </declare-styleable>
 </resources>
