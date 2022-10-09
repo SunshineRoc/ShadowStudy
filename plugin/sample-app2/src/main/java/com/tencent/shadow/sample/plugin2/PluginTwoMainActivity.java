@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 
 import com.tencent.shadow.sample.plugin.app.lib.R;
+import com.tencent.shadow.sample.plugin1.ToastUtils;
 
 public class PluginTwoMainActivity extends Activity {
 
@@ -18,6 +19,6 @@ public class PluginTwoMainActivity extends Activity {
     }
 
     private void initView() {
-//        findViewById(R.id.btn_call_plugin1).setOnClickListener(v -> ToastUtils.show(PluginTwoMainActivity.this, "插件2调用插件1"));
+        findViewById(R.id.btn_call_plugin1).setOnClickListener(v -> ToastUtils.show(PluginTwoMainActivity.this, "插件2调用插件1的ToastUtils"));
     }
 }

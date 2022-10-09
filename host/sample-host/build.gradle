@@ -192,7 +192,25 @@ def generateAssets(generateAssetsTask, buildType) {
     )
 
     /*
-      第五步：把插件3的apk包复制到宿主 build 的 assets 目录中
+      第五步：把插件2的apk包复制到宿主 build 的 assets 目录中
+     */
+    def pluginTwoModule = 'sample-app2'
+    def pluginTwoApkFile = file(
+            "${project(":$pluginTwoModule").getBuildDir()}" +
+                    "/outputs/apk/plugin/${buildType}/" +
+                    "${pluginTwoModule}-plugin-${buildType}.apk"
+    )
+    generateAssetsTask.dependsOn createCopyTask(
+            ":$pluginTwoModule",
+            buildType,
+            directoryName,
+            "$pluginTwoModule-plugin-${buildType}.apk",
+            pluginTwoApkFile,
+            "assemble${buildType.capitalize()}"
+    )
+
+    /*
+      第六步：把插件3的apk包复制到宿主 build 的 assets 目录中
      */
     def pluginThreeModule = 'sample-app3'
     def pluginThreeApkFile = file(

@@ -91,6 +91,16 @@ shadow {
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
                     }
 
+                    // 插件2
+                    pluginApk2 {
+                        businessName = 'sample-plugin-app2'
+                        partKey = 'sample-plugin-app2'
+                        buildTask = ':sample-app2:assemblePluginDebug'
+                        apkPath = 'plugin/sample-app2/build/outputs/apk/plugin/debug/sample-app2-plugin-debug.apk'
+                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
+                        dependsOn = ['sample-plugin-app1'] // 插件2依赖于插件1，所以这里的内容必须与插件1的partKey一致
+                    }
+
                     // 插件3
                     // 添加该配置后，插件1的config.json文件中可包含插件3的信息。
                     pluginApk3 {
@@ -114,6 +124,16 @@ shadow {
                         buildTask = ':sample-app1:assemblePluginRelease'
                         apkPath = 'plugin/sample-app1/build/outputs/apk/plugin/release/sample-app1-plugin-release.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
+                    }
+
+                    // 插件2
+                    pluginApk2 {
+                        businessName = 'sample-plugin-app2'
+                        partKey = 'sample-plugin-app2'
+                        buildTask = ':sample-app2:assemblePluginDebug'
+                        apkPath = 'plugin/sample-app2/build/outputs/apk/plugin/debug/sample-app2-plugin-release.apk'
+                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
+                        dependsOn = ['sample-plugin-app1'] // 插件2依赖于插件1，所以这里的内容必须与插件1的partKey一致
                     }
 
                     // 插件3

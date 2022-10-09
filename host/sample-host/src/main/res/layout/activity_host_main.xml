@@ -42,8 +42,7 @@
         android:background="@color/purple_200"
         android:text="启动插件2"
         android:textColor="@color/white"
-        android:textSize="15sp"
-        android:visibility="gone" />
+        android:textSize="15sp" />
 
     <Button
         android:id="@+id/bt_load_plugin3"
