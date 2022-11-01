@@ -18,11 +18,20 @@
         android:textColor="@android:color/black"
         android:textSize="20sp" />
 
+    <TextView
+        android:id="@+id/tv_host_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="16sp" />
+
     <Button
         android:id="@+id/btn_call_host"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:text="调用宿主" />
 
     <Button

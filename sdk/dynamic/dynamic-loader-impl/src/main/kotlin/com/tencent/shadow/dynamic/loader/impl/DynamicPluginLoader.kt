@@ -25,6 +25,7 @@ import android.content.ServiceConnection
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.os.Process.myPid
 import com.tencent.shadow.core.common.LoggerFactory
 import com.tencent.shadow.core.loader.ShadowPluginLoader
 import com.tencent.shadow.core.runtime.container.ContentProviderDelegateProviderHolder
@@ -207,6 +208,12 @@ internal class DynamicPluginLoader(hostContext: Context, uuid: String) {
                     + "，intent=" + intent)
             mContext.startActivity(intent)
         }
+    }
+
+    @Synchronized
+    fun sendMessageToPlugin(message: String) {
+        LoggerFactory.getLogger(DynamicPluginLoader::class.java).info("sendMessageToPlugin() ==> 进程ID=${myPid()}，给插件传递消息：$message")
+        mPluginLoader.sendMessageToPlugin(message)
     }
 
     private class ServiceConnectionWrapper(private val mConnection: BinderPluginServiceConnection) :

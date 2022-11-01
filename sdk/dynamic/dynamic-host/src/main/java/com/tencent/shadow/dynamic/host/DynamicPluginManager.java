@@ -64,6 +64,12 @@ public final class DynamicPluginManager implements PluginManager {
 //        mUpdater.update();
     }
 
+    @Override
+    public void sendMessageToPlugin(String message) {
+        mLogger.info("sendMessageToPlugin() ==> 宿主向插件发送消息：" + message);
+        mManagerImpl.sendMessageToPlugin(message);
+    }
+
     public void release() {
         if (mLogger.isInfoEnabled()) {
             mLogger.info("release");

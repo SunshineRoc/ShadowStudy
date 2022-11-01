@@ -45,17 +45,24 @@ public class HostMainActivity extends AppCompatActivity {
 
         findViewById(ResourceUtils.getResourceId(HostMainActivity.this, "bt_load_plugin1")).setOnClickListener(v -> {
             // 加载插件1
-            loadPlugin(PART_KEY_PLUGIN_APP_ONE, "com.tencent.shadow.sample.plugin1.PluginOneMainActivity");
+            loadPlugin(PART_KEY_PLUGIN_APP_ONE, "com.tencent.shadow.sample.plugin1.PluginOneMainActivity", null);
         });
 
         findViewById(ResourceUtils.getResourceId(HostMainActivity.this, "bt_load_plugin2")).setOnClickListener(v -> {
             // 加载插件2
-            loadPlugin(PART_KEY_PLUGIN_APP_TWO, "com.tencent.shadow.sample.plugin2.PluginTwoMainActivity");
+            Bundle bundle = new Bundle();
+            bundle.putString(Constant.KEY_MESSAGE_TO_PLUGIN, "这是宿主发送过来的消息");
+            loadPlugin(PART_KEY_PLUGIN_APP_TWO, "com.tencent.shadow.sample.plugin2.PluginTwoMainActivity", bundle);
         });
 
         findViewById(ResourceUtils.getResourceId(HostMainActivity.this, "bt_load_plugin3")).setOnClickListener(v -> {
             // 加载插件3
-            loadPlugin(PART_KEY_PLUGIN_APP_THREE, "com.tencent.shadow.sample.plugin3.PluginThreeMainActivity");
+            loadPlugin(PART_KEY_PLUGIN_APP_THREE, "com.tencent.shadow.sample.plugin3.PluginThreeMainActivity", null);
+        });
+
+        findViewById(ResourceUtils.getResourceId(HostMainActivity.this, "bt_send_message_to_plugin")).setOnClickListener(v -> {
+            // 向插件发送消息
+            HostApplication.getApplication().getPluginManager().sendMessageToPlugin("这是宿主发来的消息");
         });
 
         findViewById(ResourceUtils.getResourceId(HostMainActivity.this, "bt_uninstall_plugin")).setOnClickListener(v -> {
@@ -76,8 +83,9 @@ public class HostMainActivity extends AppCompatActivity {
      *
      * @param partKey
      * @param className
+     * @param paramBundle 宿主传给插件的参数
      */
-    private void loadPlugin(String partKey, String className) {
+    private void loadPlugin(String partKey, String className, Bundle paramBundle) {
         PluginHelper.getInstance().singlePool.execute(() -> {
 
             LoggerFactory.getLogger(PluginHelper.class).info("loadPlugin() ==> 准备打开插件，context=" + HostMainActivity.this + "，getApplicationContext()=" + HostMainActivity.this.getApplicationContext());
@@ -87,6 +95,8 @@ public class HostMainActivity extends AppCompatActivity {
             bundle.putString(Constant.KEY_PLUGIN_PART_KEY, partKey);
             // 宿主加载插件时显示的启动页，该启动页显示在插件进程中
             bundle.putString(Constant.KEY_ACTIVITY_CLASSNAME, className);
+            // 宿主给插件传参数
+            bundle.putBundle(Constant.KEY_EXTRAS, paramBundle);
 
             // 进入插件
             HostApplication.getApplication().getPluginManager()

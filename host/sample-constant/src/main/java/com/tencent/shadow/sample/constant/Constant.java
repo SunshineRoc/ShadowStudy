@@ -21,7 +21,9 @@ package com.tencent.shadow.sample.constant;
 final public class Constant {
     public static final String KEY_PLUGIN_ZIP_PATH = "pluginZipPath";
     public static final String KEY_ACTIVITY_CLASSNAME = "KEY_ACTIVITY_CLASSNAME";
-    public static final String KEY_EXTRAS = "KEY_EXTRAS";
+    public static final String KEY_EXTRAS = "KEY_EXTRAS"; // 宿主传递给插件的Bundle的键
+    public static final String KEY_MESSAGE_TO_PLUGIN = "KEY_MESSAGE_TO_PLUGIN"; // 宿主传递给插件的Bundle中的信息的键
+
     public static final String KEY_PLUGIN_PART_KEY = "KEY_PLUGIN_PART_KEY";
     public static final String PART_KEY_PLUGIN_MAIN_APP = "sample-plugin-app";
 

@@ -39,7 +39,7 @@ internal class PluginLoaderBinder(private val mDynamicPluginLoader: DynamicPlugi
             reply: android.os.Parcel?,
             flags: Int
     ): Boolean {
-        LoggerFactory.getLogger(PluginLoaderBinder::class.java).info("onTransact() ==> code=$code，this=$this，Process.myPid()=${Process.myPid()}")
+        LoggerFactory.getLogger(PluginLoaderBinder::class.java).info("onTransact() ==> code=$code，this=$this，进程ID=${Process.myPid()}，进程名=${Process::class.java.name}")
 
         if (reply == null) {
             throw NullPointerException("reply == null")
@@ -208,6 +208,20 @@ internal class PluginLoaderBinder(private val mDynamicPluginLoader: DynamicPlugi
                 } catch (e: Exception) {
                     reply.writeException(wrapExceptionForBinder(e))
                 }
+                return true
+            }
+            PluginLoader.TRANSACTION_sendMessageToPlugin -> {
+                LoggerFactory.getLogger(PluginLoaderBinder::class.java).info("onTransact() ==> sendMessageToPlugin，给插件传递消息，this=$this，Process.myPid()=${Process.myPid()}")
+                data.enforceInterface(PluginLoader.DESCRIPTOR)
+                val _arg0: String
+                _arg0 = data.readString()!!
+                try {
+                    mDynamicPluginLoader.sendMessageToPlugin(_arg0)
+                    reply.writeNoException()
+                } catch (e: Exception) {
+                    reply.writeException(wrapExceptionForBinder(e))
+                }
+
                 return true
             }
         }

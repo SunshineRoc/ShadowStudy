@@ -55,7 +55,7 @@ class BinderPluginLoader implements PluginLoader {
     @Override
     public void loadPlugin(String partKey) throws RemoteException {
         LoggerFactory.getLogger(BinderPluginLoader.class).info("loadPlugin() ==> 加载Plugin，mRemote=" + mRemote
-                + "，Process.myPid()=" + Process.myPid() + "，Process.class.getName()=" + Process.class.getName());
+                + "，进程ID=" + Process.myPid() + "，进程名=" + Process.class.getName());
 
         Parcel _data = Parcel.obtain();
         Parcel _reply = Parcel.obtain();
@@ -245,6 +245,23 @@ class BinderPluginLoader implements PluginLoader {
             _data.writeInterfaceToken(DESCRIPTOR);
             intent.writeToParcel(_data, 0);
             mRemote.transact(TRANSACTION_startActivityInPluginProcess, _data, _reply, 0);
+            _reply.readException();
+        } finally {
+            _reply.recycle();
+            _data.recycle();
+        }
+    }
+
+    @Override
+    public void sendMessageToPlugin(String message) throws RemoteException {
+        LoggerFactory.getLogger(BinderPluginLoader.class).info("sendMessageToPlugin() ==> 给插件传递消息：" + message);
+
+        Parcel _data = Parcel.obtain();
+        Parcel _reply = Parcel.obtain();
+        try {
+            _data.writeInterfaceToken(DESCRIPTOR);
+            _data.writeString(message);
+            mRemote.transact(TRANSACTION_sendMessageToPlugin, _data, _reply, 0);
             _reply.readException();
         } finally {
             _reply.recycle();

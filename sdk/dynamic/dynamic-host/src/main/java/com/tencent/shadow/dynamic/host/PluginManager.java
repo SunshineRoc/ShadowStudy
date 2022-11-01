@@ -42,4 +42,11 @@ public interface PluginManager {
      * @param callback 用于从PluginManager实现中返回View
      */
     void enter(Context context, long fromId, Bundle bundle, EnterCallback callback);
+
+    /**
+     * 宿主向插件发送消息
+     *
+     * @param message 消息内容
+     */
+    void sendMessageToPlugin(String message);
 }

@@ -30,6 +30,7 @@ import android.app.Application;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.util.Log;
 
 import com.tencent.shadow.core.common.InstalledApk;
 import com.tencent.shadow.core.common.LoggerFactory;
@@ -38,6 +39,8 @@ import java.io.File;
 
 
 public class PluginProcessService extends BasePluginProcessService {
+
+    private final String TAG = PluginProcessService.class.getSimpleName();
 
     private final PpsBinder mPpsControllerBinder = new PpsBinder(this);
 
@@ -53,6 +56,9 @@ public class PluginProcessService extends BasePluginProcessService {
 
     @Override
     public IBinder onBind(Intent intent) {
+
+        Log.v(TAG, "onBind()，宿主进程，进程ID=" + android.os.Process.myPid());
+
         if (mLogger.isInfoEnabled()) {
             mLogger.info("onBind:" + this);
         }

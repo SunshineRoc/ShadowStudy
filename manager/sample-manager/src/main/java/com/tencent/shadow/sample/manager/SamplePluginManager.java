@@ -111,6 +111,17 @@ public class SamplePluginManager extends FastPluginManager {
         }
     }
 
+    @Override
+    public void sendMessageToPlugin(String message) {
+        LoggerFactory.getLogger(SamplePluginManager.class).info("sendMessageToPlugin() ==> 宿主向插件发送消息：" + message);
+
+        try {
+            mPluginLoader.sendMessageToPlugin(message);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void loadViewToHost(final Context context, Bundle bundle) {
         Intent pluginIntent = new Intent();
         pluginIntent.setClassName(

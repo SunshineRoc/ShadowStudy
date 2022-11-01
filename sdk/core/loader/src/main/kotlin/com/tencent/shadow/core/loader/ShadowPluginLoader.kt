@@ -183,6 +183,9 @@ abstract class ShadowPluginLoader(hostAppContext: Context) : DelegateProvider, D
         }
     }
 
+    fun sendMessageToPlugin(message: String) {
+        LoggerFactory.getLogger(ShadowPluginLoader::class.java).info("sendMessageToPlugin() ==> 收到宿主传来的消息：$message")
+    }
 
     override fun getHostContentProviderDelegate(): HostContentProviderDelegate {
         return ShadowContentProviderDelegate(mPluginContentProviderManager)

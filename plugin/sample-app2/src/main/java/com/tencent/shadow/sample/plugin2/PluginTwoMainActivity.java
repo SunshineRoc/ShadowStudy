@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -14,6 +15,9 @@ import java.lang.reflect.Method;
 public class PluginTwoMainActivity extends Activity {
 
     private final String TAG = PluginTwoMainActivity.class.getSimpleName();
+    private String hostMessage; // 宿主传来的消息
+
+    private TextView tvHostMessage; // 展示宿主传来的消息
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -22,10 +26,26 @@ public class PluginTwoMainActivity extends Activity {
 
         Log.v(TAG, "onCreate()，打开插件2首页，进程ID=" + android.os.Process.myPid());
 
+        initData();
         initView();
     }
 
+    private void initData() {
+        Bundle bundle = getIntent().getExtras();
+        Log.v(TAG, "initData()，插件2首页解析宿主传递的信息，bundle=" + bundle);
+
+        if (bundle != null) {
+            hostMessage = bundle.getString("KEY_MESSAGE_TO_PLUGIN");
+            Log.v(TAG, "initData()，插件2首页解析宿主传递的信息，hostMessage=" + hostMessage);
+        }
+    }
+
     private void initView() {
+
+        // 展示宿主发来的信息
+        tvHostMessage = findViewById(R.id.tv_host_message);
+        tvHostMessage.setText(hostMessage);
+
         findViewById(R.id.btn_call_host).setOnClickListener(v -> {
             // 插件2调用宿主
             addSuffix("插件2调用宿主的addSuffix()方法");

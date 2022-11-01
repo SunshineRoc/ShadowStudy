@@ -40,6 +40,7 @@ public interface PluginLoader {
     int TRANSACTION_bindPluginService = (IBinder.FIRST_CALL_TRANSACTION + 6);
     int TRANSACTION_unbindService = (IBinder.FIRST_CALL_TRANSACTION + 7);
     int TRANSACTION_startActivityInPluginProcess = (IBinder.FIRST_CALL_TRANSACTION + 8);
+    int TRANSACTION_sendMessageToPlugin = (IBinder.FIRST_CALL_TRANSACTION + 9);
 
 
     void loadPlugin(String partKey) throws RemoteException;
@@ -60,4 +61,5 @@ public interface PluginLoader {
 
     void startActivityInPluginProcess(Intent intent) throws RemoteException;
 
+    void sendMessageToPlugin(String message) throws RemoteException;
 }
