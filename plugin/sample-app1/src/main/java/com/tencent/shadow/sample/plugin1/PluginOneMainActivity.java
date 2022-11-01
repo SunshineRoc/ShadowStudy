@@ -1,6 +1,7 @@
 package com.tencent.shadow.sample.plugin1;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -32,6 +33,14 @@ public class PluginOneMainActivity extends Activity {
         imageView = findViewById(R.id.iv_image);
 
         findViewById(R.id.btn_show_toast).setOnClickListener(v -> ToastUtils.show(PluginOneMainActivity.this, "这是插件1的首页"));
+
+        findViewById(R.id.btn_send_broadcast).setOnClickListener(v -> {
+            // 给插件2发送广播
+            Intent intent = new Intent();
+            intent.setAction("com.tencent.shadow.sample.plugin2.receiver.PluginTwoBroadcastReceiver.action");
+            intent.putExtra("KEY_BROADCAST_DATA", "这是插件1发送的广播消息");
+            sendBroadcast(intent);
+        });
 
         findViewById(R.id.btn_show_image).setOnClickListener(v -> {
             Glide.with(PluginOneMainActivity.this)

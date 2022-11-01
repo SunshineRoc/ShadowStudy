@@ -2,6 +2,7 @@ package com.tencent.shadow.sample.plugin2;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -59,6 +60,11 @@ public class PluginTwoMainActivity extends Activity {
         findViewById(R.id.btn_call_plugin3).setOnClickListener(v -> {
             // 插件2调用插件3
             requestNetwork();
+        });
+
+        findViewById(R.id.btn_send_broadcast).setOnClickListener(v -> {
+            // 发送广播，供其它插件接收
+            sendBroadcastToOtherPlugin();
         });
     }
 
@@ -138,5 +144,20 @@ public class PluginTwoMainActivity extends Activity {
             e.printStackTrace();
             Log.e(TAG, "requestNetwork()，e=" + e.getMessage());
         }
+    }
+
+    /**
+     * 给插件1、插件3发送广播
+     */
+    private void sendBroadcastToOtherPlugin() {
+        Intent intent1 = new Intent();
+        intent1.setAction("com.tencent.shadow.sample.plugin1.receiver.PluginOneBroadcastReceiver.action");
+        intent1.putExtra("KEY_BROADCAST_DATA", "这是插件2发送的广播消息");
+        sendBroadcast(intent1);
+
+        Intent intent2 = new Intent();
+        intent2.setAction("com.tencent.shadow.sample.plugin3.receiver.PluginThreeBroadcastReceiver.action");
+        intent2.putExtra("KEY_BROADCAST_DATA", "这是插件2发送的广播消息");
+        sendBroadcast(intent2);
     }
 }

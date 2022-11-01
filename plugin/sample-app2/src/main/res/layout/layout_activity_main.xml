@@ -47,4 +47,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="调用插件3" />
+
+    <Button
+        android:id="@+id/btn_send_broadcast"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="发送广播" />
 </LinearLayout>

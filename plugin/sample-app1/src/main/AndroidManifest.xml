@@ -17,6 +17,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name="com.tencent.shadow.sample.plugin1.receiver.PluginOneBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.tencent.shadow.sample.plugin1.receiver.PluginOneBroadcastReceiver.action" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>
 
