@@ -13,6 +13,7 @@ import com.tencent.shadow.sample.plugin.app.lib.base.plugin.R;
 
 public class PluginOneMainActivity extends Activity {
 
+    private final String TAG = PluginOneMainActivity.class.getSimpleName();
     private ImageView imageView;
     private final String IMAGE_URL = "https://lmg.jj20.com/up/allimg/1114/102920105033/201029105033-6-1200.jpg";
 
@@ -21,7 +22,8 @@ public class PluginOneMainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_activity_main);
 
-        Log.v("PluginOneMainActivity", "onCreate()，打开插件首页，context=" + this);
+        Log.v(TAG, "onCreate()，打开插件首页，context=" + this);
+        Log.v(TAG, "onCreate()，打开插件1首页，进程ID=" + android.os.Process.myPid());
 
         initView();
     }

@@ -14,28 +14,22 @@ import com.tencent.shadow.sample.plugin3.data.DialogParams;
 import com.tencent.shadow.sample.plugin3.view.CommonDialog;
 import com.tencent.shadow.sample.plugin3.view.PermissionWindow;
 
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import java.lang.reflect.Method;
 
 public class PluginThreeMainActivity extends Activity {
 
     private TextView tvNetworkResponse;
     private PermissionWindow permissionWindow;
     private CommonDialog commonDialog;
-    private Call call;
 
-    private final String NETWORK_URL = "https://www.baidu.com/";
     private final String TAG = PluginThreeMainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_activity_main);
+
+        Log.v(TAG, "onCreate()，打开插件3首页，进程ID=" + android.os.Process.myPid());
 
         initView();
     }
@@ -55,7 +49,7 @@ public class PluginThreeMainActivity extends Activity {
 
         tvNetworkResponse = findViewById(R.id.tv_network_response);
         findViewById(R.id.bt_request_network).setOnClickListener(V -> {
-            requestNetwork();
+            requestGet();
         });
     }
 
@@ -103,38 +97,37 @@ public class PluginThreeMainActivity extends Activity {
     }
 
     /**
-     * OkHttp
+     * 通过反射调用 OkHttpManager 类的 requestGet() 方法
      */
-    private void requestNetwork() {
-        if (call == null) {
-            OkHttpClient okHttpClient = new OkHttpClient();
-            Request.Builder builder = new Request.Builder();
-            Request request = builder
-                    .get()
-                    .url(NETWORK_URL)
-                    .build();
-            call = okHttpClient.newCall(request);
+    private void requestGet() {
+        try {
+            Class okHttpManagerClazz = Class.forName("com.tencent.shadow.sample.plugin3.network.OkHttpManager");
+            Log.v(TAG, "requestNetwork()，okHttpManagerClazz=" + okHttpManagerClazz);
+
+//            // 获取类的构造器
+//            Constructor constructor = okHttpManagerClazz.getDeclaredConstructor();
+//            // 把构造器私有权限放开
+//            constructor.setAccessible(true);
+//            Method getInstance = okHttpManagerClazz.getMethod("getInstance");
+//            Log.v(TAG, "requestNetwork()，getInstance=" + getInstance);
+
+            Object okHttpManager = okHttpManagerClazz.newInstance();
+            Log.v(TAG, "requestNetwork()，okHttpManager=" + okHttpManager);
+
+//            Class responseListenerClazz = Class.forName("com.tencent.shadow.sample.plugin3.network.IResponseListener");
+//            Log.v(TAG, "requestNetwork()，responseListenerClazz=" + responseListenerClazz);
+
+//            Object responseListener = responseListenerClazz.newInstance();
+//            Log.v(TAG, "requestNetwork()，responseListener=" + responseListener);
+
+            Method requestGet = okHttpManagerClazz.getMethod("requestGet", String.class, Class.forName("com.tencent.shadow.sample.plugin3.network.IResponseListener"));
+            Log.v(TAG, "requestNetwork()，requestGet=" + requestGet);
+
+//            requestGet.invoke(okHttpManager, "https://www.baidu.com/", responseListener);
+            requestGet.invoke(okHttpManager, "https://www.baidu.com/", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "requestNetwork()，e=" + e.getMessage());
         }
-
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e(TAG, "onFailure()，网络请求失败，e=" + e.getMessage());
-                e.printStackTrace();
-                runOnUiThread(() -> tvNetworkResponse.setText("网络请求失败：" + e.getMessage()));
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) {
-                try {
-                    final String res = response.body().string();
-                    runOnUiThread(() -> tvNetworkResponse.setText(res));
-                    Log.i(TAG, "onResponse()，网络请求成功，res=" + res);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "onResponse()，网络响应解析异常，e=" + e.getMessage());
-                }
-            }
-        });
     }
 }

@@ -98,7 +98,9 @@ shadow {
                         buildTask = ':sample-app2:assemblePluginDebug'
                         apkPath = 'plugin/sample-app2/build/outputs/apk/plugin/debug/sample-app2-plugin-debug.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
-                        dependsOn = ['sample-plugin-app1'] // 插件2依赖于插件1，所以这里的内容必须与插件1的partKey一致
+                        // 插件2依赖于插件1和插件3，所以这里的内容必须与插件1和插件3的partKey一致。
+                        // 注意：只有此处配置依赖后，插件2才能通过反射，访问插件1和插件3中的类。
+                        dependsOn = ['sample-plugin-app1', 'sample-plugin-app3']
                     }
 
                     // 插件3
@@ -133,7 +135,7 @@ shadow {
                         buildTask = ':sample-app2:assemblePluginDebug'
                         apkPath = 'plugin/sample-app2/build/outputs/apk/plugin/debug/sample-app2-plugin-release.apk'
                         hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
-                        dependsOn = ['sample-plugin-app1'] // 插件2依赖于插件1，所以这里的内容必须与插件1的partKey一致
+                        dependsOn = ['sample-plugin-app1', 'sample-plugin-app3']
                     }
 
                     // 插件3

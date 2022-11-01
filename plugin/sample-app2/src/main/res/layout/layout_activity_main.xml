@@ -11,6 +11,7 @@
         android:id="@+id/tv_msg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
         android:gravity="center"
         android:tag="tv_msg"
         android:text="这是插件2的首页"
@@ -18,8 +19,23 @@
         android:textSize="20sp" />
 
     <Button
+        android:id="@+id/btn_call_host"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="调用宿主" />
+
+    <Button
         android:id="@+id/btn_call_plugin1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="调用插件1" />
+
+    <Button
+        android:id="@+id/btn_call_plugin3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="调用插件3" />
 </LinearLayout>

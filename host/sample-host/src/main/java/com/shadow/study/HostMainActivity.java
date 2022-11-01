@@ -8,6 +8,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,10 +23,14 @@ import com.tencent.shadow.sample.constant.Constant;
 
 public class HostMainActivity extends AppCompatActivity {
 
+    private final String TAG = HostMainActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(ResourceUtils.getLayoutId(HostMainActivity.this, "activity_host_main"));
+
+        Log.v(TAG, "onCreate()，打开宿主首页，进程ID=" + android.os.Process.myPid());
 
         initPermission();
         initView();
