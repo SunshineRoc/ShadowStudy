@@ -1,7 +1,5 @@
 package com.tencent.shadow.sample.plugin3.network;
 
-import okhttp3.Response;
-
 /**
  * 网络请求的响应结果
  */
@@ -12,7 +10,7 @@ public interface IResponseListener {
      *
      * @param response 接口响应结果
      */
-    void onSuccess(Response response);
+    void onSuccess(String response);
 
     /**
      * 请求失败时的回调

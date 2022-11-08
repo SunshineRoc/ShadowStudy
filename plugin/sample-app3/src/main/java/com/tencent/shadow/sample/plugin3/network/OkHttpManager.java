@@ -30,8 +30,7 @@ public class OkHttpManager {
         return okHttpManager;
     }
 
-    // TODO 修改为 private
-    public OkHttpManager() {
+    private OkHttpManager() {
     }
 
     /**
@@ -67,7 +66,7 @@ public class OkHttpManager {
                 Log.i(TAG, "onResponse()，网络请求成功，response=" + response);
 
                 if (listener != null) {
-                    listener.onSuccess(response);
+                    listener.onSuccess(response.toString());
                 }
             }
         });

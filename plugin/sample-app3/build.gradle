@@ -58,60 +58,10 @@ android {
 }
 
 dependencies {
-    //Shadow Transform后业务代码会有一部分实际引用runtime中的类
-    //如果不以compileOnly方式依赖，会导致其他Transform或者Proguard找不到这些类
+    // Shadow Transform后业务代码会有一部分实际引用runtime中的类
+    // 如果不以compileOnly方式依赖，会导致其他Transform或者Proguard找不到这些类
     pluginCompileOnly 'com.tencent.shadow.core:runtime'
 
     implementation 'androidx.appcompat:appcompat:1.4.2'
-
     implementation 'com.squareup.okhttp3:okhttp:3.12.0'
-}
-
-shadow {
-    transform {
-//        useHostContext = ['abc']
-    }
-
-    packagePlugin {
-        pluginTypes {
-            debug {
-                loaderApkConfig = new Tuple2('sample-loader-debug.apk', ':sample-loader:assembleDebug')
-                runtimeApkConfig = new Tuple2('sample-runtime-debug.apk', ':sample-runtime:assembleDebug')
-                pluginApks {
-                    pluginApk {
-                        businessName = 'sample-plugin-app'
-                        partKey = 'sample-plugin-app3'
-                        buildTask = ':sample-app3:assemblePluginDebug'
-                        apkPath = 'plugin/sample-app3/build/outputs/apk/plugin/debug/sample-app3-plugin-debug.apk'
-                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
-                    }
-                }
-            }
-
-            release {
-                loaderApkConfig = new Tuple2('sample-loader-release.apk', ':sample-loader:assembleRelease')
-                runtimeApkConfig = new Tuple2('sample-runtime-release.apk', ':sample-runtime:assembleRelease')
-                pluginApks {
-                    pluginApk {
-                        businessName = 'sample-plugin-app'
-                        partKey = 'sample-plugin-app3'
-                        buildTask = ':sample-app3:assemblePluginDebug'
-                        apkPath = 'plugin/sample-app3/build/outputs/apk/plugin/debug/sample-app3-plugin-release.apk'
-                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
-                    }
-                }
-            }
-        }
-
-        loaderApkProjectPath = 'host/sample-loader'
-        runtimeApkProjectPath = 'host/sample-runtime'
-
-        archiveSuffix = System.getenv("PluginSuffix") ?: ""
-        archivePrefix = 'plugin'
-        destinationDir = "${getRootProject().getBuildDir()}"
-
-        version = 4
-        compactVersion = [1, 2, 3]
-        uuidNickName = "1.1.3"
-    }
 }

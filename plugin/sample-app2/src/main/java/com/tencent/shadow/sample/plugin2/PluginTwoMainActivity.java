@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.tencent.shadow.sample.constant.Constant;
+import com.tencent.shadow.sample.host.lib.HostLibToastUtils;
 import com.tencent.shadow.sample.plugin.app.lib.R;
 
 import java.lang.reflect.Method;
@@ -50,6 +52,10 @@ public class PluginTwoMainActivity extends Activity {
         findViewById(R.id.btn_call_host).setOnClickListener(v -> {
             // 插件2调用宿主
             addSuffix("插件2调用宿主的addSuffix()方法");
+
+            HostLibToastUtils.show(this, "插件2调用宿主的HostToastUtils");
+            Log.v(TAG, "插件2调用宿主的Constant：" + Constant.PART_KEY_PLUGIN_MAIN_APP);
+//            Log.v(TAG, "插件2调用宿主的StringUtils：" + StringUtils.addSuffix("插件2"));
         });
 
         findViewById(R.id.btn_call_plugin1).setOnClickListener(v -> {
@@ -60,6 +66,7 @@ public class PluginTwoMainActivity extends Activity {
         findViewById(R.id.btn_call_plugin3).setOnClickListener(v -> {
             // 插件2调用插件3
             requestNetwork();
+//            pluginThreeRequestNetwork();
         });
 
         findViewById(R.id.btn_send_broadcast).setOnClickListener(v -> {
@@ -110,6 +117,23 @@ public class PluginTwoMainActivity extends Activity {
             e.printStackTrace();
             Log.e(TAG, "showToast()，e=" + e.getMessage());
         }
+    }
+
+    /**
+     * 通过依赖，调用插件3中的 OkHttpManager 类的 requestGet() 方法
+     */
+    private void pluginThreeRequestNetwork() {
+//        OkHttpManager.getInstance().requestGet("https://www.baidu.com", new IResponseListener() {
+//            @Override
+//            public void onSuccess(String response) {
+//                Log.v(TAG, "pluginThreeRequestNetwork() -> onSuccess()，response=" + response);
+//            }
+//
+//            @Override
+//            public void onFailed(String message) {
+//                Log.e(TAG, "pluginThreeRequestNetwork() -> onFailed()，message=" + message);
+//            }
+//        });
     }
 
     /**

@@ -60,65 +60,14 @@ android {
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.2'
 
-    //注意sample-host-lib要用compileOnly编译而不打包在插件中。在packagePlugin任务中配置hostWhiteList允许插件访问宿主的类。
+    // 注意sample-host-lib要用compileOnly编译而不打包在插件中。在packagePlugin任务中配置hostWhiteList允许插件访问宿主的类。
     pluginCompileOnly project(":sample-host-lib")
+    pluginCompileOnly project(":sample-constant")
+
     normalImplementation project(":sample-host-lib")
+    normalImplementation project(":sample-constant")
 
-    //Shadow Transform后业务代码会有一部分实际引用runtime中的类
-    //如果不以compileOnly方式依赖，会导致其他Transform或者Proguard找不到这些类
+    // Shadow Transform后业务代码会有一部分实际引用runtime中的类
+    // 如果不以compileOnly方式依赖，会导致其他Transform或者Proguard找不到这些类
     pluginCompileOnly 'com.tencent.shadow.core:runtime'
-}
-
-preBuild.dependsOn(":sample-host-lib:jarDebugPackage")
-
-
-shadow {
-    transform {
-//        useHostContext = ['abc']
-    }
-
-    packagePlugin {
-        pluginTypes {
-            debug {
-                loaderApkConfig = new Tuple2('sample-loader-debug.apk', ':sample-loader:assembleDebug')
-                runtimeApkConfig = new Tuple2('sample-runtime-debug.apk', ':sample-runtime:assembleDebug')
-                pluginApks {
-                    pluginApk {
-                        businessName = 'sample-plugin-app'
-                        partKey = 'sample-plugin-app2'
-                        buildTask = ':sample-app2:assemblePluginDebug'
-                        apkPath = 'plugin/sample-app2/build/outputs/apk/plugin/debug/sample-app2-plugin-debug.apk'
-                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
-                        dependsOn = ['sample-plugin-app1'] // 插件2依赖于插件1，所以这里的内容必须与插件1的partKey一致
-                    }
-                }
-            }
-
-            release {
-                loaderApkConfig = new Tuple2('sample-loader-release.apk', ':sample-loader:assembleRelease')
-                runtimeApkConfig = new Tuple2('sample-runtime-release.apk', ':sample-runtime:assembleRelease')
-                pluginApks {
-                    pluginApk {
-                        businessName = 'sample-plugin-app'
-                        partKey = 'sample-plugin-app2'
-                        buildTask = ':sample-app2:assemblePluginDebug'
-                        apkPath = 'plugin/sample-app2/build/outputs/apk/plugin/debug/sample-app2-plugin-release.apk'
-                        hostWhiteList = ["com.tencent.shadow.sample.host.lib"]
-                        dependsOn = ['sample-plugin-app1'] // 插件2依赖于插件1，所以这里的内容必须与插件1的partKey一致
-                    }
-                }
-            }
-        }
-
-        loaderApkProjectPath = 'host/sample-loader'
-        runtimeApkProjectPath = 'host/sample-runtime'
-
-        archiveSuffix = System.getenv("PluginSuffix") ?: ""
-        archivePrefix = 'plugin'
-        destinationDir = "${getRootProject().getBuildDir()}"
-
-        version = 4
-        compactVersion = [1, 2, 3]
-        uuidNickName = "1.1.2"
-    }
 }
